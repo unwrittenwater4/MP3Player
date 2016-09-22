@@ -19,8 +19,8 @@
 Define all the identifiers here
 ------------------------------------*/
 //Can't undertsand this?
-#define SMOD1
-#define SMOD0
+#define SMOD1	1
+#define SMOD0	0
 #define SPD		1
 
 //Functions to be used in UART

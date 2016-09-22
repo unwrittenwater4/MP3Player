@@ -16,8 +16,8 @@
 
 void UART_Init(uint16_t baudrate)
 {
-//	SMOD0 = 0;
-//	PCON = ((SMOD1<<7)|(SMOD0<<6));
+	//Think this is correct?
+	PCON = ((SMOD1<<7)|(SMOD0<<6)); //Not sure of shift
 
 	//Initialiazing SCON register
 		SM0 = 0; SM1 = 1; //Mode 1
