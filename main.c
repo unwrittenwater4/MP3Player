@@ -7,8 +7,10 @@
 //		  Sengupta, Ayush
 //---------------------------------//
 
+#include <stdio.h>
 #include "main.h"
 #include "uart.h"
+#include "port.h"
 
 void main(void)
 {	uint8_t send_value, recieve_value, return_value;
