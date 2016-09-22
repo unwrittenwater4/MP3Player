@@ -22,3 +22,8 @@ Define all the identifiers here
 #define SMOD1
 #define SMOD0
 #define SPD		1
+
+//Functions to be used in UART
+void UART_Init(uint16_t baudrate);
+uint8_t UART_Transmit (uint8_t send_value);
+uint8_t UART_Recieve (void);

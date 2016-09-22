@@ -12,7 +12,7 @@
 
 //----------------------------------//
 
-//UART Initialization function
+/*--- UART Initialization function ---*/
 
 void UART_Init(uint16_t baudrate)
 {
@@ -37,3 +37,22 @@ void UART_Init(uint16_t baudrate)
 
 //UART Initialized
 }
+
+
+/*--- UART_Transmit ---*/
+
+uint8_t UART_Transmit (uint8_t send_value)
+{ uint16_t timeout; uint8_t return_value;
+	//wait for T1 to be set
+	timeout =1;
+	while ((TI == 0) && (timeout !=0))	timeout++;
+
+	SBUF = send_value;
+	return_value = send_value;
+
+	return return_value;
+
+}
+
+
+/*--- UART_Recieve---*/
