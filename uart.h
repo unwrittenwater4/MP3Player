@@ -1,11 +1,12 @@
 //---------------------------------//
-// Header file to initailize UART.H
+// Header file to initailize UART.C
 //---------------------------------//
 //---------------------------------//
 //Project: MP3 Player
 //Author: Singh, Siddharth; Vaidhun, Sudharshan;
 //		  Sengupta, Ayush
 //---------------------------------//
+
 
 
 #ifndef UART_H
@@ -17,10 +18,7 @@
 /*----------------------------------
 Define all the identifiers here
 ------------------------------------*/
-
-/* Cannot find SMOD1 or SPD anywhere in the AT89****.h file
-What to do? - Sid
-#define SMOD1	0
-#define SPD		1	
-*/
-
+//Can't undertsand this?
+#define SMOD1
+#define SMOD0
+#define SPD		1
