@@ -29,10 +29,9 @@ void UART_Init(uint16_t baudrate)
 	//Disabling Interrupt
 		ES =0;
 
-	TI =1;
 
 	BDRCON = 0;
-	BRL = baudrate;
+	BRL = 256-(((1+(1*SMOD1))*(1+(5*SPD))*OSC_FREQ)/(OSC_PER_INST*32*baudrate)) ;
 	BDRCON = (0x1C|(SPD<<1));
 
 //UART Initialized
@@ -44,7 +43,6 @@ void UART_Init(uint16_t baudrate)
 uint8_t UART_Transmit (uint8_t send_value)
 { uint16_t timeout; uint8_t return_value;
 	//wait for T1 to be set
-	TI = 1;
 	timeout =1;
 	while ((TI == 0) && (timeout !=0))	timeout++;
 
