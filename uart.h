@@ -27,3 +27,6 @@ Define all the identifiers here
 void UART_Init(uint16_t baudrate);
 uint8_t UART_Transmit (uint8_t send_value);
 uint8_t UART_Recieve (void);
+
+
+#endif

@@ -31,7 +31,7 @@ void print_16bytes(uint8_t * array_in)
       putchar(dat);
    }
    putchar(CR);
-   putchar(LF);
+//   putchar(LF);
 }
 
 

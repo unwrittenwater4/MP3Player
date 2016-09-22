@@ -16,8 +16,8 @@
 
 void UART_Init(uint16_t baudrate)
 {
-	SMOD0 = 0;
-	PCON = ((SMOD1<<7)|(SMOD0<<6));
+//	SMOD0 = 0;
+//	PCON = ((SMOD1<<7)|(SMOD0<<6));
 
 	//Initialiazing SCON register
 		SM0 = 0; SM1 = 1; //Mode 1
@@ -44,6 +44,7 @@ void UART_Init(uint16_t baudrate)
 uint8_t UART_Transmit (uint8_t send_value)
 { uint16_t timeout; uint8_t return_value;
 	//wait for T1 to be set
+	TI = 1;
 	timeout =1;
 	while ((TI == 0) && (timeout !=0))	timeout++;
 
@@ -54,5 +55,15 @@ uint8_t UART_Transmit (uint8_t send_value)
 
 }
 
+/*--- UART_Recieve ---*/
 
-/*--- UART_Recieve---*/
+uint8_t UART_Recieve(void)
+{	uint16_t timeout; uint8_t recieved_value;
+	timeout = 1;
+	while ((RI == 0) && (timeout !=0))	timeout++;
+
+	recieved_value = SBUF;
+
+	return recieved_value;
+
+}
