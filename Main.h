@@ -31,14 +31,14 @@
 #include "AT89C51RC2.h"
 
 // Oscillator / resonator frequency (in Hz) e.g. (11059200UL)
-#define OSC_FREQ (18432000UL)
+#define OSC_FREQ (11059200UL)
 
 // Number of oscillations per instruction (12, etc)
 // 12 - Original 8051 / 8052 and numerous modern versions
 //  6 - Various Infineon and Philips devices, etc.
 //  4 - Dallas 320, 520 etc.
 //  1 - Dallas 420, etc.
-#define OSC_PER_INST (6)
+#define OSC_PER_INST (12)
 
 //------------------------------------------------------------------
 // SHOULD NOT NEED TO EDIT THE SECTIONS BELOW
