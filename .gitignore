@@ -8,6 +8,7 @@
 *.lnp
 *.LST
 *.OBJ
+*.bak
 MP3_Player
 Listings/
 Objects/
