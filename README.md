@@ -1,10 +1,18 @@
 # MP3Player
-CpE5160 Project
 
-Repository for CpE5160 Missouri S&T
-Collaborators:
-Singh, Siddharth
-Vaidhun, Suduarshan
-Sengupta, Ayush
+## CpE 5160 Project
 
-Project to design an MP3 Player
+This is the repository for our group project for CpE5160 Embedded Processor System Design course at Missouri S&T.
+
+## Project goals
+1. UART & LCD Module Interface
+2. SPI Interface & SD Card Initialization
+3. FAT File System
+4. I2C Interface & MP3 Decoder
+5. State Machine Programming
+6. MP3 Player
+
+## Collaborators
+* Singh, Siddharth
+* Vaidhun, Sudharsan
+* Sengupta, Ayush
