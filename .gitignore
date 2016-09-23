@@ -1,5 +1,14 @@
 *.uvproj
 *.uvopt
 *.uvgui.*
+*.build_log.*
+*.MAP
+*.SBR
+*.hex
+*.lnp
+*.LST
+*.OBJ
+*.bak
+MP3_Player
 Listings/
 Objects/
