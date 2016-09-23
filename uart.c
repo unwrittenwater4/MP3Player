@@ -52,9 +52,17 @@ uint8_t UART_Transmit (uint8_t send_value)
 	//wait for T1 to be set
 	timeout =1;
 	while ((TI == 0) && (timeout !=0))	timeout++;
-
-	SBUF = send_value;
-	return_value = send_value;
+	
+	if (timeout == 0)
+	{
+		return_value = -1;
+	}
+	else
+	{
+		TI = 0;
+		SBUF = send_value;
+		return_value = send_value;
+	}
 
 	// Must add timeout error return option
 	return return_value;
