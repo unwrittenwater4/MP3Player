@@ -71,15 +71,13 @@ uint8_t UART_Transmit (uint8_t send_value)
 
 uint8_t UART_Recieve(void)
 {
-	uint16_t timeout;
 	uint8_t recieved_value;
 
 	// wait for RI to be set
-	timeout = 1;
-	while ((RI == 0) && (timeout !=0))	timeout++;
+	while(RI == 0);
 
 	recieved_value = SBUF;
+	RI = 0;
 
 	return recieved_value;
-
 }
