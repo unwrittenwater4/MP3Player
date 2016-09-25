@@ -16,6 +16,7 @@ void main(void)
 {	uint8_t send_value, recieve_value, return_value;
 	uint16_t baudrate = 9600;
 	UART_Init(baudrate);
+	send_value = 'U';
 
 	while(1)
 	{

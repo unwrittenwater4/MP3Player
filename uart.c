@@ -17,8 +17,6 @@
 void UART_Init(uint16_t baudrate)
 {
 	PCON &= 0x3F;	// Clear SMOD0 bit
-	// This will affect other bits
-	// PCON = ((SMOD1<<7)|(SMOD0<<6));
 
 	if(SMOD1 == 1)
 		PCON |= 0x80;	// Set SMOD1 bit
