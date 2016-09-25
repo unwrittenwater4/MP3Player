@@ -14,12 +14,11 @@
 
 void main(void)
 {	uint8_t send_value, recieve_value, return_value;
-	uint16_t baudrate;
+	uint16_t baudrate = 9600;
 	UART_Init(baudrate);
 
 	while(1)
 	{
-		return_value = UART_Transmit(send_value);
-		recieve_value = UART_Recieve();
+		return_value = UART_Transmit(UART_Recieve());
 	}
 }
