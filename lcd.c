@@ -4,21 +4,21 @@
 #include "LCD.h"
 
 void LCD_Init(void) {
-	delay50ms(50);
+	delay50ms(1);
 	LCD_Write(COMMAND, (0x30|TWOLINE|DISPLAYON));
-	delay50ms(5);
+	delay50ms(1);
 	LCD_Write(COMMAND, (0x30|TWOLINE|DISPLAYON));
-	delay50ms(5);
+	delay50ms(1);
 	LCD_Write(COMMAND, (0x30|TWOLINE|DISPLAYON));
-	delay50ms(5);
+	delay50ms(1);
 	LCD_Write(COMMAND, (0x30|TWOLINE|DISPLAYON));
-	delay50ms(5);
+	delay50ms(1);
 	LCD_Write(COMMAND, (0x08|DISPLAYON|CURSOROFF|BLINKOFF));
-	delay50ms(5);
+	delay50ms(1);
 	LCD_Write(COMMAND, (DISPLAYCLEAR));
-	delay50ms(5);
+	delay50ms(1);
 	LCD_Write(COMMAND, (0x04|INCREMENT|SHIFTOFF));
-	delay50ms(5);
+	delay50ms(1);
 }
 
 void LCD_Write(bit registerSelect, uint8_t writeValue) {
