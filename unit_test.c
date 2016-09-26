@@ -1,2 +1,26 @@
+
+
 #include "main.h"
 #include "unit_test.h"
+#include "delay.h"
+
+void LED_FLASH_Init(void)
+   {
+   LED_state_R = 0;
+   }
+
+void LED_FLASH_Change_State(void)
+   {
+   // Change the LED from OFF to ON (or vice versa)
+   if (LED_state_R == 1)
+      {
+      LED_state_R = 0;
+      LED_pin_R = 0;
+      }
+   else
+      {
+      LED_state_G = 1;
+      LED_pin_R = 1;
+      }
+   }
+
