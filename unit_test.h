@@ -19,7 +19,6 @@ bit LED_state_Y;
 // Function prototypes
 void LED_FLASH_Init(void);
 void LED_FLASH_Change_State(void);
-void DELAY_LOOP_Wait(const unsigned int);
 
 
 #endif
