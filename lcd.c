@@ -1,3 +1,13 @@
+//---------------------------------//
+// Source file for LCD functioning
+//---------------------------------//
+//---------------------------------//
+//Project: MP3 Player
+//Author: Singh, Siddharth; Vaidhun, Sudharshan;
+//		  Sengupta, Ayush
+//---------------------------------//
+
+
 #include "main.h"
 #include "port.H"
 #include "delay.h"
