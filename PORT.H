@@ -16,6 +16,8 @@
 #ifndef _PORT_H
 #define _PORT_H
 
+// LCD Port
+sfr lcdPort   = 0x80;	// Port 0
 
 // Port 0
 sbit P0_0 = P0^0;
@@ -38,16 +40,14 @@ sbit P1_6 = P1^6;
 sbit P1_7 = P1^7;
 
 // Port 2
-sbit SW1 = P2^0;
-sbit SW2 = P2^1;
+sbit lcdEnable = P2^0;
+sbit lcdRS = P2^1;
 sbit SW3 = P2^2;
 sbit SW4 = P2^3;
 sbit REDLED = P2^4;
 sbit GREENLED = P2^5;
 sbit YELLOWLED = P2^6;
 sbit AMBERLED = P2^7;
-
-
 
 // Port 3
 sbit per_TxD = P3^0;
@@ -58,7 +58,6 @@ sbit P3_4 = P3^4;
 sbit P3_5 = P3^5;
 sbit P3_6 = P3^6;
 sbit P3_7 = P3^7;
-
 
 #endif
 
