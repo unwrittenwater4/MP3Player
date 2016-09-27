@@ -40,8 +40,8 @@ sbit P1_6 = P1^6;
 sbit P1_7 = P1^7;
 
 // Port 2
-sbit lcdEnable = P2^0;
-sbit lcdRS = P2^1;
+sbit SW1 = P2^0;
+sbit SW2 = P2^1;
 sbit SW3 = P2^2;
 sbit SW4 = P2^3;
 sbit REDLED = P2^4;
@@ -56,8 +56,8 @@ sbit P3_2 = P3^2;
 sbit P3_3 = P3^3;
 sbit P3_4 = P3^4;
 sbit P3_5 = P3^5;
-sbit P3_6 = P3^6;
-sbit P3_7 = P3^7;
+sbit lcdRS = P3^6;
+sbit lcdEnable = P3^7;
 
 #endif
 

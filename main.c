@@ -9,39 +9,26 @@
 
 #include <stdio.h>
 #include "main.h"
-#include "uart.h"
 #include "port.h"
-#include "blink.h"
+#include "uart.h"
 #include "delay.h"
+#include "blink.h"
+#include "lcd.h"
 
 void main(void)
 {
-
-	uint8_t send_value, recieve_value, return_value;
-	uint16_t baudrate = 9600;
-
-	if(OSC_PER_INST == 6)
-		CKCON0 = 0x01;
-	else if(OSC_PER_INST == 12)
-		CKCON0 = 0x00;
-
+	uint8_t received_value;
 	LED_FLASH_Init();
-	UART_Init(baudrate);
-	send_value = 'U';
-		
-	LED_FLASH_Change_State();
-	delay1s(1);
-	LED_FLASH_Change_State();
-	delay1s(1);
-	LED_FLASH_Change_State();
-	delay1s(1);
-	LED_FLASH_Change_State();
-	delay1s(1);
-	
-
+	LCD_Init();
+	UART_Init(9600);
 	while(1)
 	{
-		return_value = UART_Transmit(send_value);
-		// return_value = UART_Transmit(UART_Recieve());
+		LED_FLASH_Change_State();
+		received_value = UART_Recieve();
+		UART_Transmit(received_value);
+		LCD_Write(DATA,received_value);
+		delay1s(1);
+		LED_FLASH_Change_State();
+		delay1s(1);
 	}
 }
