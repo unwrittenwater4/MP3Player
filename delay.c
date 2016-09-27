@@ -1,4 +1,3 @@
-#include "main.h"
 #include "delay.h"
 
 void delay50ms(uint16_t time) {
