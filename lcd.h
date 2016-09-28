@@ -36,5 +36,6 @@
 // Functions to be used in lcd
 void LCD_Init(void);
 void LCD_Write(bit registerSelect, uint8_t writeValue);
+void LCD_Write_String(uint8_t *string);
 
 #endif
