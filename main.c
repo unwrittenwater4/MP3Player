@@ -22,10 +22,7 @@ void main(void)
 {
 	uint8_t received_value;
 
-	if(OSC_PER_INST == 6)
-		CKCON0 = 0x01;
-	else if(OSC_PER_INST == 12)
-		CKCON0 = 0x00;
+	CKCON0 = CKCON_V;
 
 	LED_FLASH_Init();
 	LED_Test();

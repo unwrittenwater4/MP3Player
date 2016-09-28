@@ -40,6 +40,12 @@
 //  1 - Dallas 420, etc.
 #define OSC_PER_INST (6)
 
+#if (OSC_PER_INST == 6)
+   #define CKCON_V 0x01;
+#elif (OSC_PER_INST == 12)
+   #define CKCON_V 0x00;
+#endif
+
 //------------------------------------------------------------------
 // SHOULD NOT NEED TO EDIT THE SECTIONS BELOW
 //------------------------------------------------------------------
