@@ -31,7 +31,7 @@ void print_16bytes(uint8_t * array_in)
       putchar(dat);
    }
    putchar(CR);
-//   putchar(LF);
+   putchar(LF);
 }
 
 
@@ -41,7 +41,7 @@ INPUT: Pointer to an array, number of bytes to print
 RETURNS: nothing
 CAUTION: 
 ************************************************************************/
-void print_memory(uint8_t * array_in, uint16_t number_of_bytes)
+void print_memory(uint16_t number_of_bytes, uint8_t * array_in)
 {
    uint8_t * input;
    uint16_t i;
