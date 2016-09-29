@@ -16,3 +16,7 @@ This is the repository for our group project for CpE5160 Embedded Processor Syst
 * Singh, Siddharth
 * Vaidhun, Sudharsan
 * Sengupta, Ayush
+
+#### External Links:
+
+[Photos](https://drive.google.com/open?id=0B7b-pBapfUqkaGdVb0VLS0ZCcG8 "Google Drive Link")
