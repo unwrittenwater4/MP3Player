@@ -1,5 +1,5 @@
 //---------------------------------//
-// SPI source code
+// SD source code
 //---------------------------------//
 //---------------------------------//
 //Project: MP3 Player
@@ -7,21 +7,16 @@
 //		  Sengupta, Ayush
 //---------------------------------//
 
+#include "SD_Card.h"
 
-#include "SPI.h"
-
-//SPI Initialization function
-//Inputs:
-//Outputs:
-uint8_t SPI_Master_Init(uint32_t clock_rate){
-	
-}
-
-//SPI Transfer
+//SD Card Command
 //Inputs:
 //Output:
-uint8_t SPI_Transfer(uint8_t send_value, uint8_t* recieved_value){
+uint8_t send_command(uint8_t command, uint32_t argument){
 
 }
 
+uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
+	
+}
 

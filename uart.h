@@ -1,5 +1,5 @@
 //---------------------------------//
-// Header file to initailize UART.C
+// Header file for initailize UART
 //---------------------------------//
 //---------------------------------//
 //Project: MP3 Player
