@@ -35,7 +35,34 @@ uint8_t SPI_Master_Init(uint32_t clock_rate){
 //Inputs: Send Value and Pointer to Recieved Value
 //Output: Error_Flag
 uint8_t SPI_Transfer(uint8_t send_value, uint8_t* recieved_value){
-	
+	uint8_t status_value, ret_val;
+	uint16_t timeout;
+
+	timeout = 1;
+	SPDAT = send_value;
+
+	//waiting for transfer to complete and SPIF bit (Bit 7 of SPSTA)
+	//to be set by hardware
+	do{
+		status_value = SPSTA;
+		timeout++;
+	}while ((status_value & 0xF0) == 0 && timeout !=0)
+
+	if (timeout == 0){
+		*recieved_value = 0xFF;
+		ret_val = TIMEOUT_ERROR;
+	}
+	else if ((status_value & 0x70) == 0){			//Not so Sure about the Masking and == 0?
+		*recieved_value = SPDAT;
+		ret_val = no_errors;
+	}
+	else {
+		*recieved_value = 0xFF;
+		ret_val = SPI_Error;
+	}
+
+	return = ret_val;
+
 }
 
 
