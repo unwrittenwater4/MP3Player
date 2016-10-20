@@ -1,5 +1,5 @@
 //---------------------------------//
-// Header file for initailize SD_Card
+// Header file for SPI
 //---------------------------------//
 //---------------------------------//
 //Project: MP3 Player
@@ -8,19 +8,19 @@
 //---------------------------------//
 
 
-#ifndef _SD_CARD_H
-#define _SD_CARD_H
+
+#ifndef _SPI_H
+#define _SPI_H
 
 
 #include "main.h"
 
-#define Illegal_Command		
+#define no_errors 			0
+#define illegal_clock_rate 	1
+#define TIMEOUT_ERROR 		2
+#define SPI_error 			3
 
-//Function Prototypes
-uint8_t send_command(uint8_t , uint32_t );
-uint8_t recieve_response(uint8_t , uint8_t* );
-
-
-
+uint8_t SPI_Master_Init(uint32_t);
+uint8_t SPI_Transfer(uint8_t, uint8_t*);
 
 #endif

@@ -17,6 +17,8 @@
 #include "print_bytes.h"
 #include "memory_test.h"
 #include "unit_test.h"
+#include "SPI.h"
+#include "SD_Card.h"
 
 void main(void)
 {
