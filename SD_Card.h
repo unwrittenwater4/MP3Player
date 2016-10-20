@@ -14,11 +14,11 @@
 
 #include "main.h"
 
-
+#define Illegal_Command		
 
 //Function Prototypes
-uint8_t send_command(uint8_t command, uint32_t argument);
-uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name);
+uint8_t send_command(uint8_t , uint32_t );
+uint8_t recieve_response(uint8_t , uint8_t* );
 
 
 
