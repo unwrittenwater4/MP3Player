@@ -24,8 +24,8 @@ Define all the identifiers here
 #define SPD		1
 
 //Functions to be used in UART
-void UART_Init(uint16_t baudrate);
-uint8_t UART_Transmit (uint8_t send_value);
+void UART_Init(uint16_t);
+uint8_t UART_Transmit (uint8_t);
 uint8_t UART_Recieve (void);
 
 
