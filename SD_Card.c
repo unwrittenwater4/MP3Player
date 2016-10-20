@@ -13,6 +13,8 @@
 //Inputs:
 //Output:
 uint8_t send_command(uint8_t command, uint32_t argument){
+	command = ;
+
 
 }
 
