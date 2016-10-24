@@ -16,7 +16,7 @@
 uint8_t SPI_Master_Init(uint32_t clock_rate){
 	uint8_t clock_divider, ret_val = SPI_NO_ERROR;
 
-	clock_divider = (uint8_t)((OSC_FREQ*6)/(OSC_PER_INST + clock_rate));
+	clock_divider = (uint8_t)((OSC_FREQ*6)/(OSC_PER_INST * clock_rate));
 
 	if 	(clock_divider <=2)	{SPCON = 0x70 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
 	else if (clock_divider <=4)	{SPCON = 0x71 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
