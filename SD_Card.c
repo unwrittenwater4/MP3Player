@@ -12,6 +12,17 @@
 #include "SPI.h"
 
 
+//SD Card Initialization
+//Inputs:
+//Outputs:
+void SD_Init(void){
+	
+}
+
+
+
+
+
 //SD Card Command
 //Inputs:
 //Output:
@@ -68,6 +79,7 @@ uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
 	}while((recieved_val == 0xFF) && (time_out != 0));
 
 	if (time_out == 0 ) ret_val = SD_TIMEOUT_ERROR;
-	else *array_name =SPI_return;	
+	else *array_name = SPI_return;	
 }
+
 

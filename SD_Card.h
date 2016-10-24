@@ -18,6 +18,7 @@
 #define SD_TIMEOUT_ERROR	-12		
 
 //Function Prototypes
+void SD_Init(void);
 uint8_t send_command(uint8_t , uint32_t );
 uint8_t recieve_response(uint8_t , uint8_t* );
 
