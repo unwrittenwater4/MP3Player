@@ -16,7 +16,44 @@
 //Inputs:
 //Outputs:
 void SD_Init(void){
-	
+	uint8_t rec_value =0, sd_select;
+	sd_select =0;
+	send_command(0,0);
+	receive_response(1, rec_value);
+	sd_select  =1;
+	if(error_flag == SD_NO_ERRORS)
+	{ if (rec_value[0]=0X01)
+		{ error_status = NO_ERRORS;
+		else
+		error_status=RESPONSE_ERROR;
+		}
+
+	}
+
+	if (error_status == no_errors)
+	{
+		sd_select = 0;
+		error_flag = send_command(8,0X000001AA);
+		error_flag = receive_response(5,rec_value);
+		sd_select =1;
+		if (error_flag == no_errors)
+		{
+			if(rec_value[0] == 0X05)
+			{
+				//OLd CARD
+				//error_status=version_1;
+
+			}
+			if (rec_value[0] == 0X01)
+			{
+				error_status = no_errors;
+				else
+					printf("Voltage Problem\n");
+			}
+		}
+
+	}
+
 }
 
 
