@@ -37,7 +37,7 @@ sbit P1_3 = P1^3;
 sbit P1_4 = P1^4;
 sbit P1_5 = P1^5;
 sbit P1_6 = P1^6;
-sbit P1_7 = P1^7;
+sbit SDSelect = P1^7;
 
 // Port 2
 sbit SW1 = P2^0;
