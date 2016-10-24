@@ -14,7 +14,8 @@
 
 #include "main.h"
 
-#define Illegal_Command		
+#define SD_ILLEGAL_COMMAND 	-11
+#define SD_TIMEOUT_ERROR	-12		
 
 //Function Prototypes
 uint8_t send_command(uint8_t , uint32_t );
