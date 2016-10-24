@@ -18,13 +18,13 @@ uint8_t SPI_Master_Init(uint32_t clock_rate){
 
 	clock_divider = (uint8_t)((OSC_FREQ*6)/(OSC_PER_INST + clock_rate));
 
-	if 	(clock_divider <=2)	SPCON = 0x70 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
-	else if (clock_divider <=4)	SPCON = 0x71 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
-	else if (clock_divider <=8)	SPCON = 0x72 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
-	else if (clock_divider <=16)	SPCON = 0x73 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
-	else if (clock_divider <=32)	SPCON = 0xF0 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
-	else if (clock_divider <=64)	SPCON = 0xF1 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
-	else if (clock_divider <=128)	SPCON = 0xF2 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);
+	if 	(clock_divider <=2)	{SPCON = 0x70 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
+	else if (clock_divider <=4)	{SPCON = 0x71 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
+	else if (clock_divider <=8)	{SPCON = 0x72 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
+	else if (clock_divider <=16)	{SPCON = 0x73 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
+	else if (clock_divider <=32)	{SPCON = 0xF0 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
+	else if (clock_divider <=64)	{SPCON = 0xF1 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
+	else if (clock_divider <=128)	{SPCON = 0xF2 | (CPOL_VALUE<<3) | (CPHA_VALUE <<2);}
 	else ret_val = SPI_ILLEGAL_CLK_RATE;
 
 	return ret_val;

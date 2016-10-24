@@ -12,56 +12,6 @@
 #include "SPI.h"
 
 
-//SD Card Initialization
-//Inputs: None
-//Outputs: None
-void SD_Init(void){
-	uint8_t rec_value[5];
-	uint8_t error_flag, error_status, iter = 0;
-
-	//Power On
-	SD_Select = 1;
-	for( iter = 0; iter < 10; iter++){
-		error_flag = SPI_Transfer(0xFF , &rec_value);
-	}
-
-	//CMD0
-	SD_Select =0;
-	error_flag = send_command(0,0);
-	error_flag = receive_response(1, &rec_value);
-	SD_Select  =1;
-
-	if(error_flag == SD_NO_ERRORS){
-
-		if (rec_value[0] = 0X01)	error_status = SD_NO_ERRORS;
-
-		else 	error_status = SD_RESPONSE_ERROR;
-
-	}
-
-
-	//CMD8
-	if (error_status == SD_NO_ERRORS){
-		SD_Select = 0;
-		error_flag = send_command(8,0X000001AA);
-		error_flag = receive_response(5, &rec_value);
-		SD_Select =1;
-
-		if (error_flag == SD_NO_ERRORS){
-			if(rec_value[0] == 0X05){
-				//OLd CARD
-				error_status = SD_VERSION_1;
-			}
-
-			if (rec_value[0] == 0X01) 	error_status = SD_NO_ERRORS;
-			else	printf( " Voltage Problem \n ");
-		}
-
-	}
-
-
-
-}
 
 
 
@@ -71,24 +21,24 @@ void SD_Init(void){
 //Inputs:
 //Output:
 uint8_t send_command(uint8_t CMD_value, uint32_t argument){
-	uint8_t ret_val, send_val, rec_value = 0, error_flag;
+	uint8_t ret_val, send_val, recieved_resp = 0, error_flag;
 	
 	if(CMD_value < 64){
-		ret_val = SD_SD_NO_ERRORS;
+		ret_val = SD_NO_ERRORS;
 		
 		//Send Command
 		send_val = 0x40 | CMD_value;
-		error_flag = SPI_Transfer (send_val, &rec_value);
+		error_flag = SPI_Transfer (send_val, &recieved_resp);
 
 		//Send Argument starting MSB to LSB
 		send_val = (uint8_t)(argument >> 24);
-		error_flag = SPI_Transfer (send_val, &rec_value);
+		error_flag = SPI_Transfer (send_val, &recieved_resp);
 		send_val = (uint8_t)(argument >> 16);
-		error_flag = SPI_Transfer (send_val, &rec_value);
+		error_flag = SPI_Transfer (send_val, &recieved_resp);
 		send_val = (uint8_t)(argument >> 8);
-		error_flag = SPI_Transfer (send_val, &rec_value);
+		error_flag = SPI_Transfer (send_val, &recieved_resp);
 		send_val = (uint8_t)(argument);
-		error_flag = SPI_Transfer (send_val, &rec_value);
+		error_flag = SPI_Transfer (send_val, &recieved_resp);
 
 		if (CMD_value == CMD0){
 			send_val = 0x95;
@@ -102,7 +52,7 @@ uint8_t send_command(uint8_t CMD_value, uint32_t argument){
 			send_val = 0x01;
 		}
 
-		error_flag = SPI_Transfer(send_val, &rec_value);
+		error_flag = SPI_Transfer(send_val, &recieved_resp);
 
 	}
 	else ret_val = SD_ILLEGAL_COMMAND;
@@ -111,7 +61,7 @@ uint8_t send_command(uint8_t CMD_value, uint32_t argument){
 }
 
 uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
-	uint8_t time_out = 0, send_val, SPI_retval, index, ret_val;
+	uint8_t time_out = 0, send_val, SPI_retval, index, ret_val, error_flag;
 	//Wait for R1 response
 	//Repeatedly send 0xFF until recieved value != 0xFF
 
@@ -136,9 +86,97 @@ uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
 		ret_val = error_flag;
 	}
 
+
+	//Clearing Buffer
 	error_flag = SPI_Transfer(0XFF, &SPI_retval);
 
 	return ret_val;
 }
 
 
+//SD Card Initialization
+//Inputs: None
+//Outputs: None
+void SD_Init(void){
+	uint8_t recieved_resp[5];
+	uint8_t error_flag, error_status, iter = 0;
+
+	//Power On
+	SD_Select = 1;
+	for( iter = 0; iter < 10; iter++){
+		error_flag = SPI_Transfer(0xFF , &recieved_resp);
+	}
+
+	//CMD0
+	SD_Select = 0;
+	error_flag = send_command(CMD0,0);
+	error_flag = recieve_response(1, &recieved_resp);
+	SD_Select  =1;
+
+	if(error_flag == SD_NO_ERRORS){
+
+		if (recieved_resp[0] = 0X01)	error_status = SD_NO_ERRORS;
+
+		else 	error_status = SD_RESPONSE_ERROR;
+
+	}
+
+
+	//CMD8
+	if (error_status == SD_NO_ERRORS){
+		SD_Select = 0;
+		error_flag = send_command(CMD8,0X000001AA);
+		error_flag = recieve_response(5, &recieved_resp);	//R1+R7 response
+		SD_Select = 1;
+
+		if (error_flag == SD_NO_ERRORS){
+			if(recieved_resp[0] == 0X05){
+				//OLd CARD
+				error_status = SD_VERSION_1;
+			}
+
+			if (recieved_resp[0] == 0X01) 	error_status = SD_NO_ERRORS;
+			//else	printf( " Voltage Problem \n ");
+
+		}
+	}
+
+
+	//CMD58
+	/*
+	if (error_status == SD_NO_ERRORS){
+		SD_Select = 0;
+		error_flag = send_command(CMD58, 0X000001AA);
+		error_flag = recieve_response(5, &recieved_resp);		//R1+R3 response
+		SD_Select = 1;
+
+		if (error_flag == SD_NO_ERRORS){
+			if (recieved_resp[0] == 0X01){
+				if (recieved_resp[3] == ?)
+			}
+		}
+	}
+	*/
+
+	//ACMD41:
+	//Sent by first sending CMD55 and recieving R1 response
+	//Then sending CMD41 and recieving R1 response
+
+	if (error_status == SD_NO_ERRORS){
+		SD_Select = 0;
+		error_flag = send_command(CMD55, 0X000001AA);
+		error_flag = recieve_response(1, &recieved_resp);
+		SD_Select = 1;
+
+		if (recieved_resp[0] == 0x01){
+			SD_Select = 0;
+			error_flag = send_command(CMD41, 0X000001AA);
+			error_flag = recieve_response(1, &recieved_resp);
+			SD_Select = 1;
+
+
+		}
+	}
+
+
+}
