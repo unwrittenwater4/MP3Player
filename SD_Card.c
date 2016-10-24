@@ -48,6 +48,7 @@ uint8_t send_command(uint8_t CMD_value, uint32_t argument){
 		}
 
 		error_flag = SPI_Transfer(send_val, &rec_value);
+
 	}
 	else ret_val = illegal_command;
 
@@ -55,6 +56,17 @@ uint8_t send_command(uint8_t CMD_value, uint32_t argument){
 }
 
 uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
-	
+	uint8_t time_out = 0, send_val, recieved_val;
+	//Wait for R1 response
+	//Repeatedly send 0xFF until recieved value != 0xFF
+
+	do{
+		send_val = 0xFF;
+		error_flag = SPI_Transfer(send_val, &recieved_val);
+		time_out++;
+	}while((recieved_val == 0xFF) && (time_out != 0));
+
+	if (time_out == 0 ) ret_val = SD_TIMEOUT_ERROR;
+	else *array_name =SPI_return;	
 }
 
