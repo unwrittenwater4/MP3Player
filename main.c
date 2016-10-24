@@ -35,6 +35,9 @@ void main(void)
 	UART_Init(9600);
 	UART_Test();
 
+	SPI_Master_Init(400000);
+	SD_Init();
+
 	Memory_Test();
 
 	Xdata_Memory_Test();

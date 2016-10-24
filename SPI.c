@@ -14,7 +14,7 @@
 //Outputs: Error Status (No Error or Illegal Clock Rate)
 uint8_t SPI_Master_Init(uint32_t clock_rate) {
 	uint8_t clock_divider, return_value = SPI_NO_ERROR;
-
+	
 	clock_divider = (uint8_t)((OSC_FREQ * 6)/(OSC_PER_INST * clock_rate));
 
 	if (clock_divider <=2)
@@ -58,7 +58,7 @@ uint8_t SPI_Transfer(uint8_t send_value, uint8_t* recieved_value) {
 		*recieved_value = 0xFF;
 		return_value = SPI_TIMEOUT_ERROR;
 	}
-	else if ((status_value & 0x70) == 0) {			//Not so Sure about the Masking and == 0?
+	else if ((status_value & 0x70) == 0) {
 		*recieved_value = SPDAT;
 		return_value = SPI_NO_ERROR;
 	}

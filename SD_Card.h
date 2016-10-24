@@ -13,11 +13,25 @@
 
 
 #include "main.h"
+#include "PORT.H"
 
-#define SD_NO_ERRORS		 0
-#define SD_ILLEGAL_COMMAND 	-11
-#define SD_TIMEOUT_ERROR	-12
-#define RESPONSE_ERROR      -13
+
+#define CMD0					0
+#define CMD8					8
+
+#define CMD41					41
+#define CMD42					42
+#define CMD55					55
+#define CMD58					58
+
+
+
+#define SD_NO_ERRORS		 	0
+#define SD_ILLEGAL_COMMAND 		-11
+#define SD_TIMEOUT_ERROR		-12		
+#define SD_RESPONSE_ERROR		-13
+#define SD_VERSION_1			-14
+
 
 //Function Prototypes
 void SD_Init(void);
