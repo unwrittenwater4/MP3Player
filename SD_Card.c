@@ -16,40 +16,37 @@
 //Inputs:
 //Outputs:
 void SD_Init(void){
-	uint8_t rec_value =0, sd_select;
-	sd_select =0;
-	send_command(0,0);
-	receive_response(1, rec_value);
-	sd_select  =1;
-	if(error_flag == SD_NO_ERRORS)
-	{ if (rec_value[0]=0X01)
-		{ error_status = NO_ERRORS;
-		else
+	uint8_t rec_value =0, SD_Select = 0, error_flag, error_status;
+
+	error_flag = send_command(0,0);
+	error_flag = receive_response(1, rec_value);
+	
+	SD_Select  =1;
+
+	if(error_flag == SD_NO_ERRORS){
+
+		if (rec_value[0]=0X01)	error_status = NO_ERRORS;
+
+		else {
 		error_status=RESPONSE_ERROR;
 		}
 
 	}
 
-	if (error_status == no_errors)
-	{
-		sd_select = 0;
+	if (error_status == no_errors){
+		SD_Select = 0;
 		error_flag = send_command(8,0X000001AA);
 		error_flag = receive_response(5,rec_value);
-		sd_select =1;
-		if (error_flag == no_errors)
-		{
-			if(rec_value[0] == 0X05)
-			{
+		SD_Select =1;
+
+		if (error_flag == no_errors){
+			if(rec_value[0] == 0X05){
 				//OLd CARD
 				//error_status=version_1;
 
 			}
-			if (rec_value[0] == 0X01)
-			{
-				error_status = no_errors;
-				else
-					printf("Voltage Problem\n");
-			}
+			if (rec_value[0] == 0X01) 	error_status = no_errors;
+			else		printf("Voltage Problem\n");
 		}
 
 	}
@@ -125,7 +122,8 @@ uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
 				*(array_name + index) = SPI_retval; 
 			}
 		}
-		ret_val = SD_NO_ERRORS;
+
+		ret_val = error_flag;
 	}
 
 	error_flag = SPI_Transfer(0XFF, &SPI_retval);
