@@ -13,12 +13,15 @@
 
 
 #include "main.h"
+#include "PORT.H"
+
+
 
 #define SD_NO_ERRORS		 0
 #define SD_ILLEGAL_COMMAND 	-11
 #define SD_TIMEOUT_ERROR	-12		
-#define RESPONSE_ERROR      -13
-#define Version_1			-14
+#define SD_RESPONSE_ERROR   -13
+#define SD_VERSION_1		-14
 
 
 //Function Prototypes

@@ -13,45 +13,53 @@
 
 
 //SD Card Initialization
-//Inputs:
-//Outputs:
+//Inputs: None
+//Outputs: None
 void SD_Init(void){
-	uint8_t rec_value =0, SD_Select = 0, error_flag, error_status;
+	uint8_t rec_value[5];
+	uint8_t error_flag, error_status, iter = 0;
 
+	//Power On
+	SD_Select = 1;
+	for( iter = 0; iter < 10; iter++){
+		error_flag = SPI_Transfer(0xFF , &rec_value);
+	}
+
+	//CMD0
+	SD_Select =0;
 	error_flag = send_command(0,0);
-	error_flag = receive_response(1, rec_value);
-	
+	error_flag = receive_response(1, &rec_value);
 	SD_Select  =1;
 
-	if(error_flag == SD_SD_NO_ERRORS){
+	if(error_flag == SD_NO_ERRORS){
 
-		if (rec_value[0]=0X01)	error_status = SD_NO_ERRORS;
+		if (rec_value[0] = 0X01)	error_status = SD_NO_ERRORS;
 
-		else {
-		error_status=RESPONSE_ERROR;
-
-		}
+		else 	error_status = SD_RESPONSE_ERROR;
 
 	}
 
 
+	//CMD8
 	if (error_status == SD_NO_ERRORS){
 		SD_Select = 0;
 		error_flag = send_command(8,0X000001AA);
-		error_flag = receive_response(5,rec_value);
+		error_flag = receive_response(5, &rec_value);
 		SD_Select =1;
 
 		if (error_flag == SD_NO_ERRORS){
 			if(rec_value[0] == 0X05){
 				//OLd CARD
-				error_status = Version_1;
+				error_status = SD_VERSION_1;
 			}
 
 			if (rec_value[0] == 0X01) 	error_status = SD_NO_ERRORS;
-			else		printf("Voltage Problem\n");
+			else	printf( " Voltage Problem \n ");
 		}
 
 	}
+
+
 
 }
 
@@ -119,7 +127,7 @@ uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
 	if((SPI_retval == 0x01) || (SPI_retval == 0x00))		//0x01 -> Idle state; 0x00-> active state
 	{
 		if (number_of_bytes > 1){
-			for(index = 0; index < number_of_bytes; index++ ){
+			for(index = 1; index < number_of_bytes; index++ ){
 				error_flag = SPI_Transfer ( 0xFF, &SPI_retval);
 				*(array_name + index) = SPI_retval; 
 			}
@@ -129,6 +137,7 @@ uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
 	}
 
 	error_flag = SPI_Transfer(0XFF, &SPI_retval);
+
 	return ret_val;
 }
 
