@@ -16,8 +16,10 @@
 
 #define SD_NO_ERRORS		 0
 #define SD_ILLEGAL_COMMAND 	-11
-#define SD_TIMEOUT_ERROR	-12
+#define SD_TIMEOUT_ERROR	-12		
 #define RESPONSE_ERROR      -13
+#define Version_1			-14
+
 
 //Function Prototypes
 void SD_Init(void);
