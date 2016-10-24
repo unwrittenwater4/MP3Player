@@ -3,7 +3,7 @@
 //---------------------------------//
 //---------------------------------//
 //Project: MP3 Player
-//Author: Singh, Siddharth; Vaidhun, Sudharshan;
+//Author: Singh, Siddharth; Vaidhun, Sudharsan;
 //		  Sengupta, Ayush
 //---------------------------------//
 
@@ -15,10 +15,13 @@
 
 #include "main.h"
 
-#define no_errors 				0
-#define SPI_ILLEGAL_CLK_RATE 	1
-#define TIMEOUT_ERROR 			2
-#define SPI_ERROR 				3
+#define SPI_NO_ERROR            0
+#define SPI_ILLEGAL_CLK_RATE    -1
+#define SPI_TIMEOUT_ERROR       -2
+#define SPI_ERROR               -3
+
+#define CPOL_VALUE 0
+#define CPHA_VALUE 0
 
 uint8_t SPI_Master_Init(uint32_t);
 uint8_t SPI_Transfer(uint8_t, uint8_t*);
