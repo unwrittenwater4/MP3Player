@@ -22,7 +22,7 @@
 
 void main(void)
 {
-	uint8_t received_value;
+	uint8_t received_value, SD_Error;
 
 	CKCON0 = CKCON_V;
 
@@ -36,7 +36,7 @@ void main(void)
 	UART_Test();
 
 	SPI_Master_Init(400000);
-	SD_Init();
+	SD_Error = SD_Init();
 
 	Memory_Test();
 
