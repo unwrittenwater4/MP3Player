@@ -23,6 +23,8 @@
 void main(void)
 {
 	uint8_t received_value, SD_Error;
+	uint8_t array[512];
+	uint32_t block_number;
 
 	CKCON0 = CKCON_V;
 
@@ -44,8 +46,18 @@ void main(void)
 	
 	while(1)
 	{
-		received_value = UART_Recieve();
-		UART_Transmit(received_value);
-		LCD_Write(DATA,received_value);
+		printf("Enter a block number to read : ");
+		block_number = long_serial_input();
+		SD_Select = 0;
+		SD_Error = SD_Send_Command(CMD17, block_number);
+		if(SD_Error == SD_NO_ERRORS) {
+			SD_Error = SD_Read_Block(512, &array);
+		}
+
+		print_memory(512, &array);
+
+		// received_value = UART_Recieve();
+		// UART_Transmit(received_value);
+		// LCD_Write(DATA,received_value);
 	}
 }
