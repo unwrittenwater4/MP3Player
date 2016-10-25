@@ -135,6 +135,13 @@ uint8_t SD_Init(void){
 		SD_Select = 1;
 
 		if (error_flag == SD_NO_ERRORS) {
+			if (received_response[0] == 0x01) {
+				error_status = SD_NO_ERRORS;
+				printf("Response is 0x01\n");
+			}
+			else
+				error_status = SD_RESPONSE_ERROR;
+
 			if(received_response[0] == SD_ILLEGAL_COMMAND) {
 				//Old SD Card
 				printf("Response is 0x05\n");
@@ -146,12 +153,6 @@ uint8_t SD_Init(void){
 				SD_Card_Ver = SD_VERSION_2;
 			}
 
-			if (received_response[0] == 0x01) {
-				error_status = SD_NO_ERRORS;
-				printf("Response is 0x01\n");
-			}
-			else
-				error_status = SD_RESPONSE_ERROR;
 		}
 	}
 
@@ -196,7 +197,7 @@ uint8_t SD_Init(void){
 
 	if (error_status == SD_NO_ERRORS){
 		SD_Select = 0;
-		printf("Sending ACMD41 ... ");
+		printf("Sending ACMD41 ... \n");
 		do{
 			error_flag = SD_Send_Command(CMD55, 0);
 			if (error_flag == SD_NO_ERRORS){	
@@ -230,7 +231,7 @@ uint8_t SD_Init(void){
 		if (SD_Card_Ver == SD_VERSION_2){
 			SD_Select = 0;
 			error_flag = SD_Send_Command(CMD58, 0X000001AA);
-			printf("CMD58 is sent ... ");
+			printf("CMD58 is sent ... \n");
 			error_flag = SD_Receive_Response(5, &received_response);		//R1+R3 response
 			SD_Select = 1;
 			
@@ -279,12 +280,12 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 		if (rec_value == 0xFE){
 			for(index = 0; index < number_of_bytes; index++){
 				error_flag = SPI_Transfer(0xFF, &rec_value);
-				array[index] = rec_value;
+				*(array + index) = rec_value;
 			}
 
-			error_flag = SPI_Transfer(0XFF, &rec_value);
-			error_flag = SPI_Transfer(0XFF, &rec_value);
-			error_flag = SPI_Transfer(0XFF, &rec_value);
+			error_flag = SPI_Transfer(0xFF, &rec_value);
+			error_flag = SPI_Transfer(0xFF, &rec_value);
+			error_flag = SPI_Transfer(0xFF, &rec_value);
 		} 
 		else {
 			error_status = rec_value;
