@@ -66,17 +66,17 @@ uint8_t UART_Transmit (uint8_t send_value)
 
 }
 
-/*--- UART_Recieve ---*/
+/*--- UART_Receive ---*/
 
-uint8_t UART_Recieve(void)
+uint8_t UART_Receive(void)
 {
-	uint8_t recieved_value;
+	uint8_t received_value;
 
 	// wait for RI to be set
 	while(RI == 0);
 
-	recieved_value = SBUF;
+	received_value = SBUF;
 	RI = 0;
 
-	return recieved_value;
+	return received_value;
 }

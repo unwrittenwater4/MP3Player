@@ -38,9 +38,9 @@ uint8_t SPI_Master_Init(uint32_t clock_rate) {
 }
 
 //SPI Transfer
-//Inputs: Send Value and Pointer to Recieved Value
+//Inputs: Send Value and Pointer to Received Value
 //Output: Error_Flag
-uint8_t SPI_Transfer(uint8_t send_value, uint8_t* recieved_value) {
+uint8_t SPI_Transfer(uint8_t send_value, uint8_t* received_value) {
 	uint8_t status_value, return_value;
 	uint16_t timeout;
 
@@ -55,15 +55,15 @@ uint8_t SPI_Transfer(uint8_t send_value, uint8_t* recieved_value) {
 	} while ((status_value & 0xF0) == 0 && timeout !=0);
 
 	if (timeout == 0){
-		*recieved_value = 0xFF;
+		*received_value = 0xFF;
 		return_value = SPI_TIMEOUT_ERROR;
 	}
 	else if ((status_value & 0x70) == 0) {
-		*recieved_value = SPDAT;
+		*received_value = SPDAT;
 		return_value = SPI_NO_ERROR;
 	}
 	else {
-		*recieved_value = 0xFF;
+		*received_value = 0xFF;
 		return_value = SPI_ERROR;
 	}
 

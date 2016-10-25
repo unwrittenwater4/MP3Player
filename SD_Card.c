@@ -18,24 +18,24 @@ uint8_t SD_Card_Ver;
 //Inputs: Command and Argument
 //Output: Error
 uint8_t SD_Send_Command(uint8_t CMD_value, uint32_t argument) {
-	uint8_t return_value, send_value, recieved_response = 0, error_flag;
+	uint8_t return_value, send_value, received_response = 0, error_flag;
 	
 	if(CMD_value < 64) {
 		return_value = SD_NO_ERRORS;
 		
 		//Send Command
 		send_value = 0x40 | CMD_value;
-		error_flag = SPI_Transfer (send_value, &recieved_response);
+		error_flag = SPI_Transfer (send_value, &received_response);
 
 		//Send Argument starting MSB to LSB
 		send_value = (uint8_t)(argument >> 24);
-		error_flag = SPI_Transfer (send_value, &recieved_response);
+		error_flag = SPI_Transfer (send_value, &received_response);
 		send_value = (uint8_t)(argument >> 16);
-		error_flag = SPI_Transfer (send_value, &recieved_response);
+		error_flag = SPI_Transfer (send_value, &received_response);
 		send_value = (uint8_t)(argument >> 8);
-		error_flag = SPI_Transfer (send_value, &recieved_response);
+		error_flag = SPI_Transfer (send_value, &received_response);
 		send_value = (uint8_t)(argument);
-		error_flag = SPI_Transfer (send_value, &recieved_response);
+		error_flag = SPI_Transfer (send_value, &received_response);
 
 		if (CMD_value == CMD0){
 			send_value = 0x95;
@@ -47,7 +47,7 @@ uint8_t SD_Send_Command(uint8_t CMD_value, uint32_t argument) {
 			send_value = 0x01;
 		}
 
-		error_flag = SPI_Transfer(send_value, &recieved_response);
+		error_flag = SPI_Transfer(send_value, &received_response);
 
 	} else {
 		return_value = SD_ILLEGAL_COMMAND;
@@ -57,13 +57,13 @@ uint8_t SD_Send_Command(uint8_t CMD_value, uint32_t argument) {
 }
 
 
-//SD Card Recieve Command
+//SD Card Receive Command
 //Inputs: Num of Bytes, Response array
 //Output: Error
-uint8_t SD_Recieve_Response(uint8_t number_of_bytes, uint8_t* array_name){
+uint8_t SD_Receive_Response(uint8_t number_of_bytes, uint8_t* array_name){
 	uint8_t time_out = 1, send_value, SPI_retval, index, return_value, error_flag;
 	//Wait for R1 response
-	//Repeatedly send 0xFF until recieved value != 0xFF
+	//Repeatedly send 0xFF until received value != 0xFF
 
 	do {
 		send_value = 0xFF;
@@ -100,25 +100,25 @@ uint8_t SD_Recieve_Response(uint8_t number_of_bytes, uint8_t* array_name){
 //Inputs: None
 //Outputs: Error Status
 uint8_t SD_Init(void){
-	uint8_t recieved_response[5];
+	uint8_t received_response[5];
 	uint8_t error_flag, error_status, iter = 0, time_out;
 
 	//Power On
 	printf("Initializing SD Card ...\n");
 	SD_Select = 1;
 	for(iter = 0; iter < 10; iter++){
-		error_flag = SPI_Transfer(0xFF , &recieved_response);
+		error_flag = SPI_Transfer(0xFF , &received_response);
 	}
 
 	//CMD0
 	SD_Select = 0;
 	error_flag = SD_Send_Command(CMD0,0);
 	printf("CMD0 is sent ... ");
-	error_flag = SD_Recieve_Response(1, &recieved_response);
+	error_flag = SD_Receive_Response(1, &received_response);
 	SD_Select  =1;
 
 	if(error_flag == SD_NO_ERRORS) {
-		if (recieved_response[0] == 0x01) {
+		if (received_response[0] == 0x01) {
 			error_status = SD_NO_ERRORS;
 			printf("Response is 0x01\n");
 		}
@@ -131,11 +131,11 @@ uint8_t SD_Init(void){
 		SD_Select = 0;
 		error_flag = SD_Send_Command(CMD8,0x000001AA);
 		printf("CMD8 is sent ... ");
-		error_flag = SD_Recieve_Response(5, &recieved_response);	//R1+R7 response
+		error_flag = SD_Receive_Response(5, &received_response);	//R1+R7 response
 		SD_Select = 1;
 
 		if (error_flag == SD_NO_ERRORS) {
-			if(recieved_response[0] == SD_ILLEGAL_COMMAND) {
+			if(received_response[0] == SD_ILLEGAL_COMMAND) {
 				//Old SD Card
 				printf("Response is 0x05\n");
 				printf("SD Card Ver 1.0\n");
@@ -146,7 +146,7 @@ uint8_t SD_Init(void){
 				SD_Card_Ver = SD_VERSION_2;
 			}
 
-			if (recieved_response[0] == 0x01) {
+			if (received_response[0] == 0x01) {
 				error_status = SD_NO_ERRORS;
 				printf("Response is 0x01\n");
 			}
@@ -161,28 +161,28 @@ uint8_t SD_Init(void){
 		SD_Select = 0;
 		error_flag = SD_Send_Command(CMD58, 0X000001AA);
 		printf("CMD58 is sent ... ");
-		error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
+		error_flag = SD_Receive_Response(5, &received_response);		//R1+R3 response
 		SD_Select = 1;
 
 		if (error_flag == SD_NO_ERRORS){
-			if (recieved_response[0] == 0x01){
-				if ((recieved_response[3] & (0x80))>1)
+			if (received_response[0] == 0x01){
+				if ((received_response[3] & (0x80))>1)
 					printf("Voltage is 2.7 to 2.8 V\n");
-				else if ((recieved_response[2] & 0x01)>1)
+				else if ((received_response[2] & 0x01)>1)
 					printf("2.8 to 2.9 V\n");
-				else if ((recieved_response[2] & 0x02)>1)
+				else if ((received_response[2] & 0x02)>1)
 					printf("2.9 to 3.0 V\n");
-				else if ((recieved_response[2] & 0x04)>1)
+				else if ((received_response[2] & 0x04)>1)
 					printf("3.0 to 3.1 V\n");
-				else if ((recieved_response[2] & 0x08)>1)
+				else if ((received_response[2] & 0x08)>1)
 					printf("3.1 to 3.2 V\n");
-				else if ((recieved_response[2] & 0x10)>1)
+				else if ((received_response[2] & 0x10)>1)
 					printf("3.2 to 3.3 V\n");
-				else if ((recieved_response[2] & 0x20)>1)
+				else if ((received_response[2] & 0x20)>1)
 					printf("3.3 to 3.4 V\n");
-				else if ((recieved_response[2] & 0x40)>1)
+				else if ((received_response[2] & 0x40)>1)
 					printf("3.4 to 3.5 V\n");
-				else if ((recieved_response[2] & 0x80)>1)
+				else if ((received_response[2] & 0x80)>1)
 					printf("3.5 to 3.6 V\n");
 			}
 		}
@@ -201,9 +201,9 @@ uint8_t SD_Init(void){
 			error_flag = SD_Send_Command(CMD55, 0);
 			if (error_flag == SD_NO_ERRORS){	
 			
-			 	error_flag = SD_Recieve_Response(1, &recieved_response);
+			 	error_flag = SD_Receive_Response(1, &received_response);
 			
-				if (recieved_response[0] == 0x01 || recieved_response[0] == 0x00) {
+				if (received_response[0] == 0x01 || received_response[0] == 0x00) {
 					if (SD_Card_Ver == SD_VERSION_1) {
 						error_flag = SD_Send_Command(CMD41, 0x00);
 						printf("CMD41 is sent with Argument 0\n");
@@ -214,14 +214,14 @@ uint8_t SD_Init(void){
 					}
 				}
 				if (error_flag == SD_NO_ERRORS)
-					error_flag = SD_Recieve_Response(1, &recieved_response);
+					error_flag = SD_Receive_Response(1, &received_response);
 				
 				time_out++;
 
 				if (time_out == 0)
 					error_flag = SD_TIMEOUT_ERROR;
 			}
-		} while((recieved_response[0] != 0x00) && (error_flag == SD_NO_ERRORS));
+		} while((received_response[0] != 0x00) && (error_flag == SD_NO_ERRORS));
 		SD_Select = 1;
 	}
 
@@ -231,13 +231,13 @@ uint8_t SD_Init(void){
 			SD_Select = 0;
 			error_flag = SD_Send_Command(CMD58, 0X000001AA);
 			printf("CMD58 is sent ... ");
-			error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
+			error_flag = SD_Receive_Response(5, &received_response);		//R1+R3 response
 			SD_Select = 1;
 			
-			if ((recieved_response[1] & 0xC0)) {
+			if ((received_response[1] & 0xC0)) {
 				printf("High Capacity card found.\n");
 				SD_Card_Ver = SD_VERSION_2_HC;
-			} else if ((recieved_response[1] & 0x80)) {
+			} else if ((received_response[1] & 0x80)) {
 				printf("Standard Capacity card found.\n");
 				printf("Standard Card not supported at the moment.\n");
 			}

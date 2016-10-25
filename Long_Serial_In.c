@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "main.h"
 #include "Long_Serial_In.h"
-#include "UART.h"
+#include "uart.h"
 #include <stdlib.h>
 
 

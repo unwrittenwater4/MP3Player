@@ -16,17 +16,20 @@
 #include "lcd.h"
 #include "print_bytes.h"
 #include "memory_test.h"
+#include "long_serial_in.h"
 #include "unit_test.h"
 #include "SPI.h"
 #include "SD_Card.h"
 
 void main(void)
 {
-	uint8_t received_value, SD_Error;
+	// uint8_t received_value;
+	uint8_t SD_Error;
 	uint8_t array[512];
 	uint32_t block_number;
 
 	CKCON0 = CKCON_V;
+	AUXR = 0x0C;
 
 	LED_FLASH_Init();
 	LED_Test();
@@ -56,7 +59,7 @@ void main(void)
 
 		print_memory(512, &array);
 
-		// received_value = UART_Recieve();
+		// received_value = UART_Receive();
 		// UART_Transmit(received_value);
 		// LCD_Write(DATA,received_value);
 	}
