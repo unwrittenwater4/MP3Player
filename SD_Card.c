@@ -10,6 +10,7 @@
 #include "SD_Card.h"
 #include "SPI.h"
 #include "hardware_delay_1ms.h"
+#include <stdio.h>
 
 uint8_t SD_Card_Ver;
 
@@ -238,7 +239,7 @@ uint8_t SD_Init(void){
 				SD_Card_Ver = SD_VERSION_2_HC;
 			} else if ((recieved_response[1] & 0x80)) {
 				printf("Standard Capacity card found.\n");
-				printf("Standard Card not supported at the moment.\n")
+				printf("Standard Card not supported at the moment.\n");
 			}
 		}
 	}
@@ -250,7 +251,7 @@ uint8_t SD_Init(void){
 //Inputs: Number of Bytes, Pointer to array in which the block will be stored 
 //Outputs: Error Status
 uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
-	uint8_t send_value, error_flag, error_status, time_out = 1, rec_value = 0xFF;
+	uint8_t send_value, error_flag, error_status, time_out = 1, rec_value;
 	uint16_t index;
 
 	error_status = SD_NO_ERRORS;
@@ -260,22 +261,23 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 		send_value = 0xFF;
 		error_flag = SPI_Transfer(send_value, &rec_value);
 		time_out++;
-	} while((rec_value == 0xFF) && (time_out != 0));
-
-	DELAY_1ms_T1(1);
+	} while((rec_value != 0x00) && (time_out != 0));
 
 	if (time_out == 0)
 		error_status = SD_TIMEOUT_ERROR;
 
-	if (rec_value == 0X00 && error_status == SD_NO_ERRORS){
-		error_status = SD_NO_ERRORS;
-		rec_value = 0xFF; time_out = 1;
-		do{
-			error_flag = SPI_Transfer(0XFF, &rec_value);
-		}while (rec_value == 0xFF, time_out != 0);
+	if (error_status == SD_NO_ERRORS) {
+		time_out = 1;
+		do {
+			error_flag = SPI_Transfer(0xFF, &rec_value);
+			time_out++;
+		} while((rec_value != 0xFE) && ((rec_value & 0xF0)!=0x00) && (time_out != 0));
+
+		if (time_out == 0)
+			error_status = SD_TIMEOUT_ERROR;
 
 		if (rec_value == 0xFE){
-			for(index = 0; index < 512; index++){
+			for(index = 0; index < number_of_bytes; index++){
 				error_flag = SPI_Transfer(0xFF, &rec_value);
 				array[index] = rec_value;
 			}
@@ -283,10 +285,10 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 			error_flag = SPI_Transfer(0XFF, &rec_value);
 			error_flag = SPI_Transfer(0XFF, &rec_value);
 			error_flag = SPI_Transfer(0XFF, &rec_value);
+		} 
+		else {
+			error_status = rec_value;
 		}
 	}
-
-	else error_status = SD_RESPONSE_ERROR;
-
-return error_status;
+	return error_status;
 }
