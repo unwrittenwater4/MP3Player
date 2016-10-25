@@ -9,12 +9,13 @@
 #include "Main.h"
 #include "SD_Card.h"
 #include "SPI.h"
+#include "hardware_delay_1ms.h"
 
 uint8_t SD_Card_Ver;
 
-//SD Card Command
-//Inputs:
-//Output:
+//SD Card Send Command
+//Inputs: Command and Argument
+//Output: Error
 uint8_t SD_Send_Command(uint8_t CMD_value, uint32_t argument) {
 	uint8_t return_value, send_value, recieved_response = 0, error_flag;
 	
@@ -54,8 +55,12 @@ uint8_t SD_Send_Command(uint8_t CMD_value, uint32_t argument) {
 	return return_value;
 }
 
+
+//SD Card Recieve Command
+//Inputs: Num of Bytes, Response array
+//Output: Error
 uint8_t SD_Recieve_Response(uint8_t number_of_bytes, uint8_t* array_name){
-	uint8_t time_out = 0, send_value, SPI_retval, index, return_value, error_flag;
+	uint8_t time_out = 1, send_value, SPI_retval, index, return_value, error_flag;
 	//Wait for R1 response
 	//Repeatedly send 0xFF until recieved value != 0xFF
 
@@ -92,7 +97,7 @@ uint8_t SD_Recieve_Response(uint8_t number_of_bytes, uint8_t* array_name){
 
 //SD Card Initialization
 //Inputs: None
-//Outputs: None
+//Outputs: Error Status
 uint8_t SD_Init(void){
 	uint8_t recieved_response[5];
 	uint8_t error_flag, error_status, iter = 0, time_out;
@@ -221,4 +226,50 @@ uint8_t SD_Init(void){
 		}
 	}
 	return error_status;
+}
+
+
+//SD Card Read Block
+//Inputs: Number of Bytes, Pointer to array in which the block will be stored 
+//Outputs: Error Status
+uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
+	uint8_t send_value, error_flag, error_status, time_out = 1, rec_value = 0xFF;
+	uint16_t index;
+
+	error_status = SD_NO_ERRORS;
+
+	//Sending 0xFF and waiting for R1 Response
+	do {
+		send_value = 0xFF;
+		error_flag = SPI_Transfer(send_value, &rec_value);
+		time_out++;
+	} while((rec_value == 0xFF) && (time_out != 0));
+
+	DELAY_1ms_T1(1);
+
+	if (time_out == 0)
+		error_status = SD_TIMEOUT_ERROR;
+
+	if (rec_value == 0X00 && error_status == SD_NO_ERRORS){
+		error_status = SD_NO_ERRORS;
+		rec_value = 0xFF; time_out = 1;
+		do{
+			error_flag = SPI_Transfer(0XFF, &rec_value);
+		}while (rec_value == 0xFF, time_out != 0);
+
+		if (rec_value == 0xFE){
+			for(index = 0; index < 512; index++){
+				error_flag = SPI_Transfer(0xFF, &rec_value);
+				array[index] = rec_value;
+			}
+
+			error_flag = SPI_Transfer(0XFF, &rec_value);
+			error_flag = SPI_Transfer(0XFF, &rec_value);
+			error_flag = SPI_Transfer(0XFF, &rec_value);
+		}
+	}
+
+	else error_status = SD_RESPONSE_ERROR;
+
+return error_status;
 }

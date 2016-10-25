@@ -36,5 +36,6 @@
 uint8_t SD_Init(void);
 uint8_t SD_Send_Command(uint8_t, uint32_t);
 uint8_t SD_Recieve_Response(uint8_t, uint8_t*);
+uint8_t SD_Read_Block(uint16_t, uint8_t*);
 
 #endif
