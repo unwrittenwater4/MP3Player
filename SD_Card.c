@@ -141,18 +141,37 @@ uint8_t SD_Init(void){
 
 
 	//CMD58
-	// if (error_status == SD_NO_ERRORS){
-	// 	SD_Select = 0;
-	// 	error_flag = SD_Send_Command(CMD58, 0X000001AA);
-	// 	error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
-	// 	SD_Select = 1;
+	if (error_status == SD_NO_ERRORS){
+		SD_Select = 0;
+		error_flag = SD_Send_Command(CMD58, 0X000001AA);
+		error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
+		SD_Select = 1;
 
-	// 	if (error_flag == SD_NO_ERRORS){
-	// 		if (recieved_response[0] == 0X01){
-	// 			if (recieved_response[3] == )
-	// 		}
-	// 	}
-	// }
+		if (error_flag == SD_NO_ERRORS){
+			if (recieved_response[0] == 0x01){
+				if ((recieved_response[3] & (0x80))>1)
+					printf("Voltage is 2.7 to 2.8 V");
+				else if ((recieved_response[2] & 0x01)>1)
+					printf("2.8 to 2.9 V");
+				else if ((recieved_response[2] & 0x02)>1)
+					printf("2.9 to 3.0 V");
+				else if ((recieved_response[2] & 0x04)>1)
+					printf("3.0 to 3.1 V");
+				else if ((recieved_response[2] & 0x08)>1)
+					printf("3.1 to 3.2 V");
+				else if ((recieved_response[2] & 0x10)>1)
+					printf("3.2 to 3.3 V");
+				else if ((recieved_response[2] & 0x20)>1)
+					printf("3.3 to 3.4 V");
+				else if ((recieved_response[2] & 0x40)>1)
+					printf("3.4 to 3.5 V");
+				else if ((recieved_response[2] & 0x80)>1)
+					printf("3.5 to 3.6 V");
+			}
+		}
+		else
+			error_status = SD_RESPONSE_ERROR;
+	}
 
 	//ACMD41:
 	//Sent by first sending CMD55 and recieving R1 response
@@ -166,8 +185,12 @@ uint8_t SD_Init(void){
 			
 			 	error_flag = SD_Recieve_Response(1, &recieved_response);
 			
-				if (recieved_response[0] == 0x01 || recieved_response[0] == 0x00)
-					error_flag = SD_Send_Command(CMD41, 0X200001AA);
+				if (recieved_response[0] == 0x01 || recieved_response[0] == 0x00) {
+					if (SD_Card_Ver == SD_VERSION_1)
+						error_flag = SD_Send_Command(CMD41, 0x00);
+					else if (SD_Card_Ver == SD_VERSION_2)
+						error_flag = SD_Send_Command(CMD41, 0x40000000);
+				}
 				if (error_flag == SD_NO_ERRORS)
 					error_flag = SD_Recieve_Response(1, &recieved_response);
 				
@@ -176,21 +199,26 @@ uint8_t SD_Init(void){
 				if (time_out == 0)
 					error_flag = SD_TIMEOUT_ERROR;
 			}
-		} while((recieved_response[0] == 0x01) && (error_flag == SD_NO_ERRORS));
+		} while((recieved_response[0] != 0x00) && (error_flag == SD_NO_ERRORS));
+		SD_Select = 1;
 	}
 
 	//CMD58: Checking High Capacity
-	if (SD_Card_Ver == SD_VERSION_2){
-		if (error_status == SD_NO_ERRORS){
+	if (error_status == SD_NO_ERRORS) {
+		if (SD_Card_Ver == SD_VERSION_2){
 			SD_Select = 0;
 			error_flag = SD_Send_Command(CMD58, 0X000001AA);
 			error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
+			SD_Select = 1;
 			
-			if (recieved_response[0]&0x80 == 0X80){
-				
+			if ((recieved_response[1] & 0xC0)) {
+				printf("High Capacity card found.");
+				SD_Card_Ver = SD_VERSION_2_HC;
+			} else if ((recieved_response[1] & 0x80)) {
+				printf("Standard Capacity card found.");
+				printf("Standard Card not supported at the moment.")
 			}
-
-		}	
+		}
 	}
 	return error_status;
 }
