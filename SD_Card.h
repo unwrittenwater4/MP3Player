@@ -15,6 +15,7 @@
 
 #define CMD0					0
 #define CMD8					8
+#define CMD16					16
 #define CMD41					41
 #define CMD42					42
 #define CMD55					55
@@ -25,6 +26,7 @@
 #define SD_VERSION_1			1
 #define SD_VERSION_2			2
 #define SD_VERSION_2_HC			6
+
 #define SD_NO_ERRORS		 	0
 #define SD_TIMEOUT_ERROR		-12		
 #define SD_RESPONSE_ERROR		-13

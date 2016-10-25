@@ -95,7 +95,7 @@ uint8_t SD_Recieve_Response(uint8_t number_of_bytes, uint8_t* array_name){
 //Outputs: None
 uint8_t SD_Init(void){
 	uint8_t recieved_response[5];
-	uint8_t error_flag, return_value, error_status, iter = 0;
+	uint8_t error_flag, error_status, iter = 0;
 
 	//Power On
 	SD_Select = 1;
@@ -192,5 +192,5 @@ uint8_t SD_Init(void){
 
 		}	
 	}
-	return return_value;
+	return error_status;
 }
