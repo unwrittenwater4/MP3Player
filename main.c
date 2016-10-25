@@ -35,12 +35,12 @@ void main(void)
 	UART_Init(9600);
 	UART_Test();
 
+	Memory_Test();
+	Xdata_Memory_Test();
+	
 	SPI_Master_Init(400000);
 	SD_Error = SD_Init();
-
-	Memory_Test();
-
-	Xdata_Memory_Test();
+	SPI_Master_Init(20000000UL);
 	
 	while(1)
 	{

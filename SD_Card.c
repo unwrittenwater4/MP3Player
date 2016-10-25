@@ -103,6 +103,7 @@ uint8_t SD_Init(void){
 	uint8_t error_flag, error_status, iter = 0, time_out;
 
 	//Power On
+	printf("Initializing SD Card ...\n");
 	SD_Select = 1;
 	for(iter = 0; iter < 10; iter++){
 		error_flag = SPI_Transfer(0xFF , &recieved_response);
@@ -111,12 +112,15 @@ uint8_t SD_Init(void){
 	//CMD0
 	SD_Select = 0;
 	error_flag = SD_Send_Command(CMD0,0);
+	printf("CMD0 is sent ... ");
 	error_flag = SD_Recieve_Response(1, &recieved_response);
 	SD_Select  =1;
 
 	if(error_flag == SD_NO_ERRORS) {
-		if (recieved_response[0] == 0x01)
+		if (recieved_response[0] == 0x01) {
 			error_status = SD_NO_ERRORS;
+			printf("Response is 0x01\n");
+		}
 		else
 			error_status = SD_RESPONSE_ERROR;
 	}
@@ -125,19 +129,25 @@ uint8_t SD_Init(void){
 	if (error_status == SD_NO_ERRORS) {
 		SD_Select = 0;
 		error_flag = SD_Send_Command(CMD8,0x000001AA);
+		printf("CMD8 is sent ... ");
 		error_flag = SD_Recieve_Response(5, &recieved_response);	//R1+R7 response
 		SD_Select = 1;
 
 		if (error_flag == SD_NO_ERRORS) {
 			if(recieved_response[0] == SD_ILLEGAL_COMMAND) {
 				//Old SD Card
+				printf("Response is 0x05\n");
+				printf("SD Card Ver 1.0\n");
 				SD_Card_Ver = SD_VERSION_1;
 			}
-			else
+			else {
+				printf("SD Card Ver 2.0\n");
 				SD_Card_Ver = SD_VERSION_2;
+			}
 
 			if (recieved_response[0] == 0x01) {
 				error_status = SD_NO_ERRORS;
+				printf("Response is 0x01\n");
 			}
 			else
 				error_status = SD_RESPONSE_ERROR;
@@ -149,29 +159,30 @@ uint8_t SD_Init(void){
 	if (error_status == SD_NO_ERRORS){
 		SD_Select = 0;
 		error_flag = SD_Send_Command(CMD58, 0X000001AA);
+		printf("CMD58 is sent ... ");
 		error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
 		SD_Select = 1;
 
 		if (error_flag == SD_NO_ERRORS){
 			if (recieved_response[0] == 0x01){
 				if ((recieved_response[3] & (0x80))>1)
-					printf("Voltage is 2.7 to 2.8 V");
+					printf("Voltage is 2.7 to 2.8 V\n");
 				else if ((recieved_response[2] & 0x01)>1)
-					printf("2.8 to 2.9 V");
+					printf("2.8 to 2.9 V\n");
 				else if ((recieved_response[2] & 0x02)>1)
-					printf("2.9 to 3.0 V");
+					printf("2.9 to 3.0 V\n");
 				else if ((recieved_response[2] & 0x04)>1)
-					printf("3.0 to 3.1 V");
+					printf("3.0 to 3.1 V\n");
 				else if ((recieved_response[2] & 0x08)>1)
-					printf("3.1 to 3.2 V");
+					printf("3.1 to 3.2 V\n");
 				else if ((recieved_response[2] & 0x10)>1)
-					printf("3.2 to 3.3 V");
+					printf("3.2 to 3.3 V\n");
 				else if ((recieved_response[2] & 0x20)>1)
-					printf("3.3 to 3.4 V");
+					printf("3.3 to 3.4 V\n");
 				else if ((recieved_response[2] & 0x40)>1)
-					printf("3.4 to 3.5 V");
+					printf("3.4 to 3.5 V\n");
 				else if ((recieved_response[2] & 0x80)>1)
-					printf("3.5 to 3.6 V");
+					printf("3.5 to 3.6 V\n");
 			}
 		}
 		else
@@ -184,6 +195,7 @@ uint8_t SD_Init(void){
 
 	if (error_status == SD_NO_ERRORS){
 		SD_Select = 0;
+		printf("Sending ACMD41 ... ");
 		do{
 			error_flag = SD_Send_Command(CMD55, 0);
 			if (error_flag == SD_NO_ERRORS){	
@@ -191,10 +203,14 @@ uint8_t SD_Init(void){
 			 	error_flag = SD_Recieve_Response(1, &recieved_response);
 			
 				if (recieved_response[0] == 0x01 || recieved_response[0] == 0x00) {
-					if (SD_Card_Ver == SD_VERSION_1)
+					if (SD_Card_Ver == SD_VERSION_1) {
 						error_flag = SD_Send_Command(CMD41, 0x00);
-					else if (SD_Card_Ver == SD_VERSION_2)
+						printf("CMD41 is sent with Argument 0\n");
+					}
+					else if (SD_Card_Ver == SD_VERSION_2) {
 						error_flag = SD_Send_Command(CMD41, 0x40000000);
+						printf("CMD41 is sent with HCS bit set\n");
+					}
 				}
 				if (error_flag == SD_NO_ERRORS)
 					error_flag = SD_Recieve_Response(1, &recieved_response);
@@ -213,15 +229,16 @@ uint8_t SD_Init(void){
 		if (SD_Card_Ver == SD_VERSION_2){
 			SD_Select = 0;
 			error_flag = SD_Send_Command(CMD58, 0X000001AA);
+			printf("CMD58 is sent ... ");
 			error_flag = SD_Recieve_Response(5, &recieved_response);		//R1+R3 response
 			SD_Select = 1;
 			
 			if ((recieved_response[1] & 0xC0)) {
-				printf("High Capacity card found.");
+				printf("High Capacity card found.\n");
 				SD_Card_Ver = SD_VERSION_2_HC;
 			} else if ((recieved_response[1] & 0x80)) {
-				printf("Standard Capacity card found.");
-				printf("Standard Card not supported at the moment.")
+				printf("Standard Capacity card found.\n");
+				printf("Standard Card not supported at the moment.\n")
 			}
 		}
 	}
