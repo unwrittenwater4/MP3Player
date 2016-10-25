@@ -23,6 +23,8 @@ Define all the identifiers here
 // #define SMOD0	0		// This value is hardcoded in uart.c
 #define SPD		1
 
+#define UART_ERROR	-1
+
 //Functions to be used in UART
 void UART_Init(uint16_t);
 uint8_t UART_Transmit (uint8_t);
