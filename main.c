@@ -25,7 +25,7 @@ void main(void)
 {
 	// uint8_t received_value;
 	uint8_t SD_Error;
-	uint8_t array[512];
+	uint8_t xdata array[512];
 	uint32_t block_number;
 
 	CKCON0 = CKCON_V;
