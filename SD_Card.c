@@ -11,7 +11,7 @@
 #include "SD_Card.h"
 #include "SPI.h"
 
-
+uint8_t SD_Card_Ver;
 
 
 
@@ -99,7 +99,7 @@ uint8_t recieve_response(uint8_t number_of_bytes, uint8_t* array_name){
 //Outputs: None
 void SD_Init(void){
 	uint8_t recieved_resp[5];
-	uint8_t error_flag, error_status, iter = 0;
+	uint8_t error_flag, error_status, iter = 0, time_out = 0;
 
 	//Power On
 	SD_Select = 1;
@@ -130,10 +130,11 @@ void SD_Init(void){
 		SD_Select = 1;
 
 		if (error_flag == SD_NO_ERRORS){
-			if(recieved_resp[0] == 0X05){
+			if(recieved_resp[0] == SD_ILLEGAL_COMMAND){
 				//OLd CARD
-				error_status = SD_VERSION_1;
+				SD_Card_Ver = SD_VERSION_1;
 			}
+			else SD_Card_Ver = SD_VERSION_2;
 
 			if (recieved_resp[0] == 0X01) 	error_status = SD_NO_ERRORS;
 			//else	printf( " Voltage Problem \n ");
@@ -143,40 +144,64 @@ void SD_Init(void){
 
 
 	//CMD58
-	/*
-	if (error_status == SD_NO_ERRORS){
-		SD_Select = 0;
-		error_flag = send_command(CMD58, 0X000001AA);
-		error_flag = recieve_response(5, &recieved_resp);		//R1+R3 response
-		SD_Select = 1;
+	
+	// if (error_status == SD_NO_ERRORS){
+	// 	SD_Select = 0;
+	// 	error_flag = send_command(CMD58, 0X000001AA);
+	// 	error_flag = recieve_response(5, &recieved_resp);		//R1+R3 response
+	// 	SD_Select = 1;
 
-		if (error_flag == SD_NO_ERRORS){
-			if (recieved_resp[0] == 0X01){
-				if (recieved_resp[3] == ?)
-			}
-		}
-	}
-	*/
+	// 	if (error_flag == SD_NO_ERRORS){
+	// 		if (recieved_resp[0] == 0X01){
+	// 			if (recieved_resp[3] == )
+	// 		}
+	// 	}
+	// }
+	
 
 	//ACMD41:
 	//Sent by first sending CMD55 and recieving R1 response
 	//Then sending CMD41 and recieving R1 response
 
 	if (error_status == SD_NO_ERRORS){
+
 		SD_Select = 0;
-		error_flag = send_command(CMD55, 0X000001AA);
-		error_flag = recieve_response(1, &recieved_resp);
-		SD_Select = 1;
+		
+		do{
+			error_flag = send_command(CMD55, 0);
+			if (error_flag == SD_NO_ERRORS){	
+			
+			 	error_flag = recieve_response(1, &recieved_resp);
+			
+				if (recieved_resp[0] == 0x01 || recieved_resp[0] == 0x00)
+					error_flag = send_command(CMD41, 0X200001AA);
+				if (error_flag == SD_NO_ERRORS)
+					error_flag = recieve_response(1, &recieved_resp);
+				
+				time_out++;
 
-		if (recieved_resp[0] == 0x01){
-			SD_Select = 0;
-			error_flag = send_command(CMD41, 0X000001AA);
-			error_flag = recieve_response(1, &recieved_resp);
-			SD_Select = 1;
+				if (time_out == 0)
+					error_flag = SD_TIMEOUT_ERROR;
+			}
+		} while((recieved_resp[0] == 0x01) && (error_flag == SD_NO_ERRORS));
 
-
-		}
 	}
+	
+
+	//CMD58: Checking High Capacity
+	if (SD_Card_Ver == SD_VERSION_2){
+		if (error_status == SD_NO_ERRORS){
+			SD_Select = 0;
+			error_flag = send_command(CMD58, 0X000001AA);
+			error_flag = recieve_response(5, &recieved_resp);		//R1+R3 response
+			
+			if (recieved_resp[0]&0x80 == 0X80){
+				
+			}
+
+		}	
+	}
+}
 
 
 }

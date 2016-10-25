@@ -25,12 +25,15 @@
 #define CMD58					58
 
 
+#define SD_VERSION_1			1
+#define SD_VERSION_2			2
+#define SD_VERSION_2_HC			6
 
 #define SD_NO_ERRORS		 	0
-#define SD_ILLEGAL_COMMAND 		-11
+#define SD_ILLEGAL_COMMAND 		0x05
 #define SD_TIMEOUT_ERROR		-12		
 #define SD_RESPONSE_ERROR		-13
-#define SD_VERSION_1			-14
+
 
 
 //Function Prototypes
