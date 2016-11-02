@@ -1,3 +1,6 @@
+*M51
+*plg
+*.uv2
 *.uvproj
 *.uvopt
 *.uvgui.*
@@ -10,5 +13,6 @@
 *.OBJ
 *.bak
 MP3_Player
+MP3Player
 Listings/
 Objects/

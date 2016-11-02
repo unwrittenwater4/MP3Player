@@ -16,13 +16,20 @@
 #include "lcd.h"
 #include "print_bytes.h"
 #include "memory_test.h"
+#include "long_serial_in.h"
 #include "unit_test.h"
+#include "SPI.h"
+#include "SD_Card.h"
 
 void main(void)
 {
-	uint8_t received_value;
+	// uint8_t received_value;
+	uint8_t SD_Error;
+	uint8_t xdata array[512];
+	uint32_t block_number;
 
 	CKCON0 = CKCON_V;
+	AUXR = 0x0C;
 
 	LED_FLASH_Init();
 	LED_Test();
@@ -34,13 +41,26 @@ void main(void)
 	UART_Test();
 
 	Memory_Test();
-
 	Xdata_Memory_Test();
+	
+	SPI_Master_Init(400000);
+	SD_Error = SD_Init();
+	SPI_Master_Init(20000000UL);
 	
 	while(1)
 	{
-		received_value = UART_Recieve();
-		UART_Transmit(received_value);
-		LCD_Write(DATA,received_value);
+		printf("Enter a block number to read : ");
+		block_number = long_serial_input();
+		SD_Select = 0;
+		SD_Error = SD_Send_Command(CMD17, block_number);
+		if(SD_Error == SD_NO_ERRORS) {
+			SD_Error = SD_Read_Block(512, &array);
+		}
+
+		print_memory(512, &array);
+
+		// received_value = UART_Receive();
+		// UART_Transmit(received_value);
+		// LCD_Write(DATA,received_value);
 	}
 }

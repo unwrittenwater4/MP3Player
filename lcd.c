@@ -12,6 +12,7 @@
 #include "port.H"
 #include "delay.h"
 #include "LCD.h"
+#include "hardware_delay_1ms.h"
 
 void LCD_Init(void) {
 	delay50ms(1);
@@ -34,14 +35,10 @@ void LCD_Init(void) {
 
 void LCD_Write(bit registerSelect, uint8_t writeValue) {
 	lcdRS = registerSelect;
-	delay50ms(1);
 	lcdPort = writeValue;
-	delay50ms(1);
 	lcdEnable = 1;
-	// delay50ms(1);
 	lcdEnable = 0;
-	delay50ms(1);
-	// lcdPort = 0xFF;
+	DELAY_1ms_T1(1);
 }
 
 void LCD_Write_String(uint8_t *string) {

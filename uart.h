@@ -1,5 +1,5 @@
 //---------------------------------//
-// Header file to initailize UART.C
+// Header file for initailize UART
 //---------------------------------//
 //---------------------------------//
 //Project: MP3 Player
@@ -23,10 +23,12 @@ Define all the identifiers here
 // #define SMOD0	0		// This value is hardcoded in uart.c
 #define SPD		1
 
+#define UART_ERROR	-1
+
 //Functions to be used in UART
-void UART_Init(uint16_t baudrate);
-uint8_t UART_Transmit (uint8_t send_value);
-uint8_t UART_Recieve (void);
+void UART_Init(uint16_t);
+uint8_t UART_Transmit (uint8_t);
+uint8_t UART_Receive (void);
 
 
 #endif
