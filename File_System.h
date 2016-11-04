@@ -21,5 +21,6 @@ uint16_t read16(uint16_t offset, uint8_t *array_name);
 uint32_t read32(uint16_t offset, uint8_t *array_name);
 
 uint8_t mount_drive(void);
+uint32_t First_Sector(uint32_t Cluster_Num);
 
 #endif

@@ -127,3 +127,17 @@ uint8_t mount_drive(void) {
 
 	return error_flag;
 }
+
+uint32_t First_Sector(uint32_t Cluster_Num) {
+	uint32_t sector_number;
+
+	drive_p = Export_Drive_values();
+
+	if (Cluster_Num == 0) {
+		sector_number = drive_p -> FirstRootDirSec;
+	} else {
+		sector_number = ((Cluster_Num - 2) * drive_p -> SecPerClus) + drive_p -> FirstDataSec;
+	}
+
+	return sector_number;
+}
