@@ -130,6 +130,7 @@ uint8_t mount_drive(void) {
 
 uint32_t First_Sector(uint32_t Cluster_Num) {
 	uint32_t sector_number;
+	FS_values_t * drive_p;
 
 	drive_p = Export_Drive_values();
 
@@ -140,4 +141,23 @@ uint32_t First_Sector(uint32_t Cluster_Num) {
 	}
 
 	return sector_number;
+}
+
+uint32_t Find_Next_Clus(uint32_t Cluster_Num, uint8_t * array_name) {
+	uint8_t error_flag;
+	uint16_t FATOffset;
+	uint32_t sector_number, return_clus;
+	FS_values_t * drive_p;
+
+	drive_p = Export_Drive_values();
+
+	sector_number = drive_p -> StartofFAT + (Cluster_Num >> (drive_p -> BytesPerSecShift - drive_p -> FATshift));
+	error_flag = Read_Sector(sector_number, drive_p -> BytesPerSec, array_name);
+	FATOffset = (uint16_t)((Cluster_Num << drive_p -> FATtype) % (drive_p -> BytesPerSec -1));
+
+	if (drive_p -> FATtype == FAT32) {
+		return_clus = (read32(FATOffset, array_name) && 0x0FFFFFFF);
+	} else if (drive_p -> FATtype == FAT16) {
+		return_clus = (uint32_t)(read16(FATOffset, array_name));
+	}
 }
