@@ -7,6 +7,7 @@
 
 #include "File_System.h"
 #include "Directory_Functions_struct.h"
+#include <stdio.h>
 
 uint8_t idata MBR_RelSec = 0;
 
@@ -58,7 +59,7 @@ uint32_t read32(uint16_t offset, uint8_t *array_name)
 
 uint8_t mount_drive(void) {
 	uint8_t error_flag = FS_NO_ERROR, temp8;
-	uint32_t temp32;
+	// uint32_t temp32;
 	uint8_t xdata xdata_array[512];
 
 	uint8_t idata numFATs;
@@ -160,4 +161,6 @@ uint32_t Find_Next_Clus(uint32_t Cluster_Num, uint8_t * array_name) {
 	} else if (drive_p -> FATtype == FAT16) {
 		return_clus = (uint32_t)(read16(FATOffset, array_name));
 	}
+
+	return return_clus;
 }

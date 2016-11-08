@@ -15,6 +15,8 @@
 #define no_entry_found (0x80000000)  // msb set to indicate error
 #define directory_bit  (0x10000000)  // lsb of first nibble (bit28)
 
+#define no_errors (0)
+
 
 //----------------- Typedefs ----------------------------------------
 typedef struct
