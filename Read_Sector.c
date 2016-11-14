@@ -22,7 +22,7 @@ uint8_t	Read_Sector(uint32_t Sector_Number, uint16_t Sector_Size, uint8_t * arra
 	
 	SD_Select  = 1;
 	if(SD_Error == SD_NO_ERRORS) {
-		print_memory(Sector_Size, array_for_data);
+		// print_memory(Sector_Size, array_for_data);
 	} else {
 		printf("Error: %bu \n", SD_Error);
 	}
