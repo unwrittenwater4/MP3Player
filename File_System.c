@@ -6,60 +6,57 @@
 //------------------------------------------------------------------------------------------------------------------//
 
 #include "File_System.h"
-#include "Directory_Functions_struct.h"
 #include <stdio.h>
+#include "Directory_Functions_struct.h"
+// #include "Directory_Functions.h"
 
-uint8_t idata MBR_RelSec = 0;
+uint32_t idata MBR_RelSec = 0;
 
 // Function to Read 8-bit Value from XRAM Memory
-uint8_t read8(uint16_t offset, uint8_t *array_name)
-{
+uint8_t read8(uint16_t offset, uint8_t *array_name) {
 	uint8_t return_val;
 	
 	return_val = *(array_name+offset);
-	printf("%bu", return_val);
+	// printf("%bu\n", return_val);
 	
 	return return_val;
 }
 
 // Function to Read 16-bit Value from XRAM Memory and Converts the little enfdian format
-uint16_t read16(uint16_t offset, uint8_t *array_name)
-{
+uint16_t read16(uint16_t offset, uint8_t *array_name) {
 	uint16_t return_val=0;
 	uint8_t temp, index;
 	
-	for (index = 1; index >= 0; index--)
+	for (index = 2; index > 0; index--)
 	{
-		temp = *(array_name+offset+index);
+		temp = *(array_name+offset+index-1);
 		return_val = return_val << 8;
 		return_val = return_val | temp;
 	}
 
-	printf("%u", return_val);
+	// printf("%u\n", return_val);
 
 	return return_val;
 }
 
 // Function to Read 32-bit Value from XRAM Memory and Converts the little enfdian format
-uint32_t read32(uint16_t offset, uint8_t *array_name)
-{
+uint32_t read32(uint16_t offset, uint8_t *array_name) {
 	uint32_t return_val = 0;
 	uint8_t temp, index;
-	for (index = 3; index >= 0; index--)
+	for (index = 4; index > 0; index--)
 	{
-		temp = *(array_name+offset+index);
+		temp = *(array_name+offset+index-1);
 		return_val = return_val << 8;
 		return_val = return_val | temp;
 
 	}
-	printf("%lu", return_val);
+	// printf("%lu\n", return_val);
 	return return_val;
 
 }
 
 uint8_t mount_drive(void) {
 	uint8_t error_flag = FS_NO_ERROR, temp8;
-	// uint32_t temp32;
 	uint8_t xdata xdata_array[512];
 
 	uint8_t idata numFATs;
@@ -69,14 +66,15 @@ uint8_t mount_drive(void) {
 	FS_values_t * drive_p;
 	drive_p = Export_Drive_values();
 
-	Read_Sector(0, 512, xdata_array);
+	error_flag = Read_Sector(0, 512, &xdata_array);
 
-	temp8 = read8(0, xdata_array);
-
+	temp8  = read8 (  0, &xdata_array);
+	
 	if((temp8 != 0xEB) && (temp8 != 0xE9)) {
-		MBR_RelSec = read32(0x01C6, xdata_array);
-		Read_Sector(MBR_RelSec, 512, xdata_array);
-		temp8 = read8(0, xdata_array);
+		printf("Reading Master Boot Record\n");
+		MBR_RelSec = read32(0x01C6, &xdata_array);
+		error_flag = Read_Sector(MBR_RelSec, 512, &xdata_array);
+		temp8 = read8(0, &xdata_array);
 
 		if((temp8 != 0xEB) && (temp8 != 0xE9)) {
 			error_flag = UNREADABLE_DRIVE;

@@ -20,14 +20,15 @@
 #include "SPI.h"
 #include "SD_Card.h"
 #include "Read_Sector.h"
+#include "File_System.h"
 
 void main(void)
 {
 	// uint8_t received_value;
-	uint8_t SD_Error;
+	uint8_t SD_Error, FS_Error;
 	// uint16_t sector_size = 512;
-	uint8_t xdata array_for_data[512];
-	uint32_t block_number;
+	// uint8_t xdata array_for_data[512];
+	// uint32_t block_number;
 
 	CKCON0 = CKCON_V;
 	AUXR = 0x0C;
@@ -48,12 +49,16 @@ void main(void)
 	SD_Error = SD_Init();
 	SPI_Master_Init(20000000UL);
 	
+	FS_Error = mount_drive();
+
 	while(1)
 	{
-		printf("Enter a block number to read : ");
-		block_number = long_serial_input();
+		// printf("Enter a block number to read : ");
+		// block_number = long_serial_input();
 		
-		SD_Error = Read_Sector(block_number, 512, &array_for_data);
+		// SD_Error = Read_Sector(block_number, 512, &array_for_data);
+
+
 		// received_value = UART_Receive();
 		// UART_Transmit(received_value);
 		// LCD_Write(DATA,received_value);

@@ -1,14 +1,14 @@
-#include "AT89C51RC2.h"
-#include <stdio.h>
-#include "main.h"
-#include "PORT.H"
-#include "UART.h"
-#include "SPI.h"
-#include "SD_Card.h"
+// #include "AT89C51RC2.h"
+// #include <stdio.h>
+// #include "main.h"
+// #include "PORT.H"
+// #include "UART.h"
+// #include "SPI.h"
+// #include "SD_Card.h"
 #include "Directory_Functions.h"
-#include "print_bytes.h"
-#include "File_System.h"
-#include "Read_Sector.h"
+// #include "print_bytes.h"
+// #include "File_System.h"
+// #include "Read_Sector.h"
 
 uint32_t idata FirstDataSec_g, StartofFAT_g, FirstRootDirSec_g, RootDirSecs_g;
 uint16_t idata BytesPerSec_g;
