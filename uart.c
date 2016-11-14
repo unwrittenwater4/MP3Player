@@ -41,30 +41,30 @@ void UART_Init(uint16_t baudrate)
 
 /*--- UART_Transmit ---*/
 
-// uint8_t UART_Transmit (uint8_t send_value)
-// {
-// 	uint16_t timeout;
-// 	uint8_t return_value;
+uint8_t UART_Transmit (uint8_t send_value)
+{
+	uint16_t timeout;
+	uint8_t return_value;
 
-// 	//wait for T1 to be set
-// 	timeout =1;
-// 	while ((TI == 0) && (timeout !=0))	timeout++;
+	//wait for T1 to be set
+	timeout =1;
+	while ((TI == 0) && (timeout !=0))	timeout++;
 	
-// 	if (timeout == 0)
-// 	{
-// 		return_value = UART_ERROR;
-// 	}
-// 	else
-// 	{
-// 		TI = 0;
-// 		SBUF = send_value;
-// 		return_value = send_value;
-// 	}
+	if (timeout == 0)
+	{
+		return_value = UART_ERROR;
+	}
+	else
+	{
+		TI = 0;
+		SBUF = send_value;
+		return_value = send_value;
+	}
 
-// 	// Must add timeout error return option
-// 	return return_value;
+	// Must add timeout error return option
+	return return_value;
 
-// }
+}
 
 /*--- UART_Receive ---*/
 

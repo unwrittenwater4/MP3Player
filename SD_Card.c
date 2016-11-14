@@ -255,8 +255,6 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 	uint8_t send_value, error_flag, error_status, time_out = 1, rec_value;
 	uint16_t index;
 
-	// printf("Value at %d is %d\n", array, *array);
-
 	error_status = SD_NO_ERRORS;
 
 	//Sending 0xFF and waiting for R1 Response
@@ -279,7 +277,7 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 		if (time_out == 0)
 			error_status = SD_TIMEOUT_ERROR;
 
-		if (rec_value == 0xFE){
+		else if (rec_value == 0xFE){
 			for(index = 0; index < number_of_bytes; index++){
 				error_flag = SPI_Transfer(0xFF, &rec_value);
 				*(array + index) = rec_value;
@@ -292,8 +290,6 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 		else {
 			error_status = rec_value;
 		}
-	} else {
-	 error_status = 1234;
 	}
 	return error_status;
 }
