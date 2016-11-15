@@ -10,6 +10,7 @@
 #define FS_NO_ERROR (0)
 #define UNREADABLE_DRIVE (-1)
 #define UNSUPPORTED_FAT16 (-2)
+#define DIR_READ_ERROR (-3)
 
 #include "main.h"
 #include "port.h"
