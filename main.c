@@ -26,9 +26,9 @@
 void main(void)
 {
 	// uint8_t received_value;
-	uint8_t SD_Error, FS_Error, temp8;
+	uint8_t SD_Error, FS_Error, temp8, index;
 	uint16_t tot_entries, entry_input;
-	uint32_t entry_cluster, temp_sector, temp32;
+	uint32_t entry_cluster, temp_sector, current_sector, current_cluster, temp32;
 
 	uint8_t xdata array_for_data[512];
 	
@@ -55,32 +55,48 @@ void main(void)
 	SPI_Master_Init(20000000UL);
 	
 	FS_Error = mount_drive();
+	current_sector = drive_p -> FirstRootDirSec;
+	printf("Reading Root Directory\n");
 	
 	while(1)
 	{
-		printf("Reading Root Directory\n");
-		tot_entries = Print_Directory(drive_p -> FirstRootDirSec, &array_for_data);
+		tot_entries = Print_Directory(current_sector, &array_for_data);
 		printf("Enter a entry number to read : ");
 		entry_input = (uint16_t) long_serial_input();
 
-		if (entry_input <= tot_entries) {
-			temp32 = Read_Dir_Entry(drive_p -> FirstRootDirSec, entry_input, &array_for_data);
+		if ((entry_input <= tot_entries) && (entry_input > 0)) {
+			temp32 = Read_Dir_Entry(current_sector, entry_input, &array_for_data);
 			if (temp32 & 0x80000000) {
 				FS_Error = DIR_READ_ERROR;
 			} else {
 				entry_cluster = (temp32 & 0x0FFFFFFF);
 				temp_sector = First_Sector(entry_cluster);
 				if (temp32 & 0x10000000) {
-					printf("Directoy!\n");
-					tot_entries = Print_Directory(temp_sector, &array_for_data);
+					// Directory
+					// tot_entries = Print_Directory(temp_sector, &array_for_data);
+					current_sector = temp_sector;
 				} else {
-					printf("File!\n");
-					SD_Error = Read_Sector(temp_sector, 512, &array_for_data);
-					print_memory(512, array_for_data);
+					// File
+					index = 1;
+					current_cluster = entry_cluster;
+					do {
+						if (index == drive_p -> SecPerClus) {
+							current_cluster = Find_Next_Clus(current_cluster, &array_for_data);
+							temp_sector = First_Sector(entry_cluster);
+						}
+						// printf("Current Sector value : %lu\n", temp_sector);
+						SD_Error = Read_Sector(temp_sector, 512, &array_for_data);
+						print_memory(512, array_for_data);
+						printf("Press <1> to continue or <0> to exit!\n");
+						// scanf("%u",&entry_input);
+						entry_input = (uint16_t) long_serial_input();
+						temp_sector ++;
+						index ++;
+					} while(entry_input!=0);
 				}
 			}
 		} else {
-			printf("%u > %u\n", entry_input, tot_entries);
+			printf("Invalid Entry!\n");
 		}
 
 		// received_value = UART_Receive();
