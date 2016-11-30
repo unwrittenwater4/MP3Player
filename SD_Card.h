@@ -28,10 +28,11 @@
 #define SD_VERSION_2			2
 #define SD_VERSION_2_HC			6
 
-#define SD_NO_ERRORS		 	0
-#define SD_TIMEOUT_ERROR		-12		
-#define SD_RESPONSE_ERROR		-13
-#define SD_VOLTAGE_ERROR		-15
+#define SD_NO_ERRORS		 	0x00
+#define SD_TIMEOUT_ERROR		0xFE
+#define SD_RESPONSE_ERROR		0xFD
+#define SD_VOLTAGE_ERROR		0xFC
+#define SD_OTHER_ERROR			0xF0
 
 //Function Prototypes
 uint8_t SD_Init(void);

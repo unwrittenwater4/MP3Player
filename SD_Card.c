@@ -267,7 +267,7 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 	if (time_out == 0)
 		error_status = SD_TIMEOUT_ERROR;
 
-	if (error_status == SD_NO_ERRORS) {
+	if (error_status == SD_NO_ERRORS && error_flag == SD_NO_ERRORS) {
 		time_out = 1;
 		do {
 			error_flag = SPI_Transfer(0xFF, &rec_value);
@@ -277,7 +277,7 @@ uint8_t SD_Read_Block(uint16_t number_of_bytes, uint8_t * array){
 		if (time_out == 0)
 			error_status = SD_TIMEOUT_ERROR;
 
-		if (rec_value == 0xFE){
+		else if (rec_value == 0xFE){
 			for(index = 0; index < number_of_bytes; index++){
 				error_flag = SPI_Transfer(0xFF, &rec_value);
 				*(array + index) = rec_value;

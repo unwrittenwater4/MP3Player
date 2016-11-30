@@ -27,7 +27,7 @@ Define all the identifiers here
 
 //Functions to be used in UART
 void UART_Init(uint16_t);
-uint8_t UART_Transmit (uint8_t);
+// uint8_t UART_Transmit (uint8_t);
 uint8_t UART_Receive (void);
 
 

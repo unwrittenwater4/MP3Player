@@ -23,18 +23,18 @@ void UART_Test(void) {
 	printf("\n\r");
 }
 
-void Memory_Test(void) {
-	uint8_t *txt_ptr;
-	txt_ptr = code_memory_init();
-	print_memory(50, txt_ptr);
+// void Memory_Test(void) {
+// 	uint8_t *txt_ptr;
+// 	txt_ptr = code_memory_init();
+// 	print_memory(50, txt_ptr);
 
-	printf("\n\r");
-}
+// 	printf("\n\r");
+// }
 
-void Xdata_Memory_Test(void) {
-	uint8_t *txt_ptr;
-	txt_ptr = xdata_memory_init();
-	print_memory(50, txt_ptr);
+// void Xdata_Memory_Test(void) {
+// 	uint8_t *txt_ptr;
+// 	txt_ptr = xdata_memory_init();
+// 	print_memory(50, txt_ptr);
 
-	printf("\n\r");
-}
+// 	printf("\n\r");
+// }

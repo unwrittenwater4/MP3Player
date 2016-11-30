@@ -13,7 +13,7 @@
 void LED_Test(void);
 void LCD_Test(void);
 void UART_Test(void);
-void Memory_Test(void);
-void Xdata_Memory_Test(void);
+// void Memory_Test(void);
+// void Xdata_Memory_Test(void);
 
 #endif
