@@ -31,13 +31,13 @@ sbit P0_7 = P0^7;
 
 // Port 1
 sbit SD_Select = P1^0;
-sbit P1_1 = P1^1;
-sbit P1_2 = P1^2;
+sbit SCL = P1^1;	//	I2C
+sbit SDA = P1^2;	//	I2C
 sbit P1_3 = P1^3;
 sbit P1_4 = P1^4;
-sbit P1_5 = P1^5;
-sbit P1_6 = P1^6;
-sbit P1_7 = P1^7;
+sbit P1_5 = P1^5;	//	SPI
+sbit P1_6 = P1^6;	//	SPI
+sbit P1_7 = P1^7;	//	SPI
 
 // Port 2
 sbit SW1 = P2^0;

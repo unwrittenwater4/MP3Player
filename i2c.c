@@ -5,14 +5,13 @@
 // Author : Sengupta,Ayush; Vaidhun, Sudharsan; Singh, Siddharth;
 //------------------------------------------------------------------------------------------------------------------//
 
-//Posible Error
-//	SDA SCL not defined anywhere
-//	Line 31 186 85
-//-----------
 
 #include "i2c.h"
 #include "port.h"
 #include "AT89C51RC2.h"
+
+uint8_t I2C_Reload_L;
+uint8_t I2C_Reload_H;
 
 uint8_t I2C_Write (uint8_t device_addr, uint8_t num_bytes, uint8_t *bytes_to_send) {
 	uint8_t send_value, index, bit_index, error_flag = I2C_NO_ERROR;
@@ -186,4 +185,15 @@ void I2C_Clock_Delay (uint8_t control) {
 	if (control == STOP){
 		TR1 = 0;
 	}
+}
+
+void I2C_Init(uint16_t i2c_speed) {
+	uint32_t reload_value;
+	uint32_t max_count = 65535;
+	// Set i2c_speed as 24000 for decent round values for reloading
+
+	reload_value = (max_count + 1) - ((OSC_FREQ/i2c_speed)/(2*OSC_PER_INST));
+
+	I2C_Reload_L = (uint8_t) reload_value % 256;
+	I2C_Reload_H = (uint8_t) reload_value / 256;
 }
