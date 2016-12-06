@@ -16,6 +16,9 @@
 #define STOP                  0
 #define PROCEED              1     //C keyword in lowercase; I think this should be avoided?
 
+#include "main.h"
+#include "port.h"
+
 uint8_t I2C_Write (uint8_t device_addr, uint8_t num_bytes, uint8_t *bytes_to_send);
 uint8_t I2C_Read (uint8_t device_addr, uint8_t num_bytes, uint8_t *bytes_to_receive);
 

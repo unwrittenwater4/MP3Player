@@ -38,3 +38,30 @@ void UART_Test(void) {
 
 // 	printf("\n\r");
 // }
+
+void I2C_Test(void) {
+	uint8_t	I2C_error, time_out;
+	uint8_t bytes_to_send[] = {0x01};
+	uint8_t bytes_to_receive[1];
+	P1_3 =0;
+	P1_3 =1;
+	time_out = 100;
+	do {
+		I2C_error = I2C_Write(0x43, 1, &bytes_to_send);		// Sending internal memory address
+		time_out--;
+	} while((I2C_error!=I2C_NO_ERROR)&&(time_out!=0));
+	
+	// if (time_out==0) {
+	// 	printf("Address sending failed.\n");
+	// } else {
+	// 	printf("Address Sent.\n");
+	// }
+
+	time_out = 100;
+	do {
+		I2C_error = I2C_Read(0x43, 1, &bytes_to_receive);		// Receiving data from slave
+		time_out--;
+	} while((I2C_error!=I2C_NO_ERROR)&&(time_out!=0));
+	P1_3 =0;
+	printf("0x%2.2bX\n\r", bytes_to_receive[0]);
+}
