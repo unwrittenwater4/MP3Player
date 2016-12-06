@@ -6,13 +6,13 @@
 #include "uart.h"
 #include "delay.h"
 #include "blink.h"
-#include "lcd.h"
+// #include "lcd.h"
 #include "print_bytes.h"
 #include "memory_test.h"
 #include "i2c.h"
 
 void LED_Test(void);
-void LCD_Test(void);
+// void LCD_Test(void);
 void UART_Test(void);
 // void Memory_Test(void);
 // void Xdata_Memory_Test(void);

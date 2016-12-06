@@ -191,14 +191,14 @@ void I2C_Clock_Delay (uint8_t control) {
 	}
 }
 
-void I2C_Init(uint16_t i2c_speed) {
-	uint16_t reload_value = (65535 + 1) - ((OSC_FREQ/i2c_speed)/(2*OSC_PER_INST));
+void I2C_Init(uint32_t i2c_speed) {
+	uint32_t reload_value = (65535 + 1) - (OSC_FREQ/(i2c_speed*2UL*OSC_PER_INST));
 	// Set i2c_speed as 24000 for decent round values for reloading
 
 	// reload_value = (65535 + 1) - ((OSC_FREQ/i2c_speed)/(2*OSC_PER_INST));
 
 	I2C_Reload_L = (uint8_t) reload_value % 256;
-	// I2C_Reload_H = (uint8_t) reload_value / 256;
-	I2C_Reload_H = 0xFF;
+	I2C_Reload_H = (uint8_t) reload_value / 256;
+	// I2C_Reload_H = 0xFF;
 	printf("I2C Initialized.\n");
 }
