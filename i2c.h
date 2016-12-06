@@ -26,6 +26,6 @@ uint8_t I2C_Read (uint8_t device_addr, uint8_t num_bytes, uint8_t *bytes_to_rece
 void I2C_Clock_Start (void);
 void I2C_Clock_Delay (uint8_t control);
 
-void I2C_Init(uint32_t i2c_speed);
+void I2C_Init(uint16_t i2c_speed);
 
 #endif

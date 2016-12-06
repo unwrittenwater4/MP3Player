@@ -63,7 +63,7 @@ void main(void)
 	SD_Error = SD_Init();
 	SPI_Master_Init(20000000UL);
 
-	I2C_Init(24000UL);
+	I2C_Init(24000);
 	I2C_Test();
 
 	printf("Sending Patch file to MP3 Decoder\n");

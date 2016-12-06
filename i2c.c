@@ -11,8 +11,8 @@
 #include "AT89C51RC2.h"
 #include <stdio.h>
 
-uint8_t I2C_Reload_L;
-uint8_t I2C_Reload_H;
+uint8_t idata I2C_Reload_L;
+uint8_t idata I2C_Reload_H;
 
 uint8_t I2C_Write (uint8_t device_addr, uint8_t num_bytes, uint8_t *bytes_to_send) {
 	uint8_t send_value, index, bit_index, error_flag = I2C_NO_ERROR;
@@ -191,14 +191,15 @@ void I2C_Clock_Delay (uint8_t control) {
 	}
 }
 
-void I2C_Init(uint32_t i2c_speed) {
-	uint32_t reload_value = (65535 + 1) - (OSC_FREQ/(i2c_speed*2UL*OSC_PER_INST));
+void I2C_Init(uint16_t i2c_speed) { 
+	uint16_t reload_value;
 	// Set i2c_speed as 24000 for decent round values for reloading
 
-	// reload_value = (65535 + 1) - ((OSC_FREQ/i2c_speed)/(2*OSC_PER_INST));
+	 reload_value = (65535 + 1) - (uint16_t)(OSC_FREQ/(i2c_speed*2UL*OSC_PER_INST));
 
-	I2C_Reload_L = (uint8_t) reload_value % 256;
-	I2C_Reload_H = (uint8_t) reload_value / 256;
-	// I2C_Reload_H = 0xFF;
+	I2C_Reload_L = (uint8_t) (reload_value % 256);
+	I2C_Reload_H = (uint8_t) (reload_value / 256);
+
 	printf("I2C Initialized.\n");
 }
+
