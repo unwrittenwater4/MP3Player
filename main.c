@@ -52,10 +52,6 @@ void main(void)
 	UART_Init(9600);
 	UART_Test();
 
-	// for (i=0; i<50; i++) {
-	// 	printf("Value is %bu \n", *(config_ptr+i));		
-	// }
-
 	// Memory_Test();
 	// Xdata_Memory_Test();
 	
@@ -66,13 +62,11 @@ void main(void)
 	I2C_Init(24000);
 	I2C_Test();
 
-	printf("Sending Patch file to MP3 Decoder\n");
+	printf("Sending Patch file to MP3 Decoder ...\n");
 	do {
 		bytes_to_send[0] = *(config_ptr+(i++));
 		bytes_to_send[1] = *(config_ptr+(i++));
 		LED_FLASH_Change_State();
-		// printf(">%bu", bytes_to_send[0]);
-		// printf(":%bu<", bytes_to_send[1]);
 		time_out = 100;
 		do {
 			I2C_error = I2C_Write(0x43, 2, &bytes_to_send);		// Sending internal memory address
@@ -83,15 +77,13 @@ void main(void)
 		}
 	} while((I2C_error==I2C_NO_ERROR) && (bytes_to_send[0] != 0xFF));
 	if (I2C_error == I2C_NO_ERROR){
-		printf("CONFIG Sent.\n");
+		printf("... CONFIG Sent.\n");
 		i=0;
 		config_ptr = &CONFIG2;
 		do {
 			bytes_to_send[0] = *(config_ptr+(i++));
 			bytes_to_send[1] = *(config_ptr+(i++));
 			LED_FLASH_Change_State();
-			// printf(">%bu", bytes_to_send[0]);
-			// printf(":%bu<", bytes_to_send[1]);
 			time_out = 100;
 			do {
 				I2C_error = I2C_Write(0x43, 2, &bytes_to_send);		// Sending internal memory address
@@ -101,7 +93,7 @@ void main(void)
 				I2C_error = TIMEOUT_ERROR;
 			}
 		} while((I2C_error==I2C_NO_ERROR) && (bytes_to_send[0] != 0xFF));
-		printf("CONFIG2 Sent.\n");
+		printf("... CONFIG2 Sent.\n");
 	} else {
 		printf("Error!\n");
 	}
